@@ -1,6 +1,12 @@
-# Unpaired Image Translation with UVCGAN on the Simple Liquid Argon Track Samples (SLATS) dataset
+# Unpaired Image Translation of the SLATS dataset with UVCGAN
 
 **Description:**
+
+**UVCGAN** ([Paper](https://openaccess.thecvf.com/content/WACV2023/html/Torbunov_UVCGAN_UNet_Vision_Transformer_Cycle-Consistent_GAN_for_Unpaired_Image-to-Image_Translation_WACV_2023_paper.html), [repo](https://github.com/LS4GAN/uvcgan))
+
+**SLATS dataset**: the Simple Liquid Argon Track Samples 
+
+**Anoucement:** We published upgraded version of `UVCGAN`, called `UVCGANv2` ([paper](https://arxiv.org/abs/2303.16280), [repo](https://github.com/LS4GAN/uvcgan2)) producing great translations on the CelebA and AFHQ datasets. Feel free to check it out, too. Later, we will also adapt `UVCGANv2` and test it on scientific datasets.
 
 ## Download SLATS data and pre-trained models
 - Download pretrained [translator models](https://zenodo.org/deposit/7809460#) from Zenodo
