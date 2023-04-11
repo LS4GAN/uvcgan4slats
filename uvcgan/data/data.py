@@ -2,6 +2,7 @@ import os
 import torch
 
 import torchvision
+from toytools.datasets   import get_toyzero_dataset_torch
 
 from uvcgan.consts       import (
     ROOT_DATA, SPLIT_TRAIN, MERGE_PAIRED, MERGE_UNPAIRED
@@ -42,7 +43,9 @@ def select_dataset(name, path, split, transform, **kwargs):
             os.path.join(path, split), transform = transform, **kwargs
         )
 
-    raise ValueError(f"Unknown dataset: {name}")
+    return get_toyzero_dataset_torch(
+        name, path, transform = transform, split = split, **kwargs
+    )
 
 def construct_single_dataset(dataset_config, split):
     name, kwargs = extract_name_kwargs(dataset_config.dataset)
