@@ -2,7 +2,7 @@ from itertools import islice
 import tqdm
 
 from uvcgan.config      import Args
-from uvcgan.data        import get_data
+from uvcgan.data        import construct_data_loaders
 from uvcgan.torch.funcs import get_torch_device_smart, seed_everything
 from uvcgan.cgan        import construct_model
 from uvcgan.utils.log   import setup_logging
@@ -12,6 +12,8 @@ from .callbacks import TrainingHistory
 from .transfer  import transfer
 
 def training_epoch(it_train, model, title, steps_per_epoch):
+    model.train()
+
     steps = len(it_train)
     if steps_per_epoch is not None:
         steps = min(steps, steps_per_epoch)
@@ -50,9 +52,9 @@ def train(args_dict):
     setup_logging(args.log_level)
     seed_everything(args.config.seed)
 
-    device      = get_torch_device_smart()
-    it_train, _ = get_data(
-        args.config.data, args.config.batch_size, args.workers
+    device   = get_torch_device_smart()
+    it_train = construct_data_loaders(
+        args.config.data, args.config.batch_size, split = 'train'
     )
 
     print("Starting training...")
