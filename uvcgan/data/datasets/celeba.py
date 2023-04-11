@@ -1,17 +1,15 @@
 import os
-import numpy as np
 import pandas as pd
 
 from torch.utils.data import Dataset
-from .funcs import load_images, sample_image
+from torchvision.datasets.folder import default_loader
+
+from uvcgan.consts import SPLIT_TRAIN, SPLIT_VAL, SPLIT_TEST
+from uvcgan.utils.funcs import check_value_in_range
 
 FNAME_ATTRS = 'list_attr_celeba.txt'
 FNAME_SPLIT = 'list_eval_partition.txt'
 SUBDIR_IMG  = 'img_align_celeba'
-
-SPLIT_TRAIN = 'train'
-SPLIT_VAL   = 'val'
-SPLIT_TEST  = 'test'
 
 SPLITS = {
     SPLIT_TRAIN : 0,
@@ -19,48 +17,46 @@ SPLITS = {
     SPLIT_TEST  : 2,
 }
 
+DOMAINS = [ 'a', 'b' ]
+
 class CelebaDataset(Dataset):
-    # pylint: disable=too-many-instance-attributes
 
     def __init__(
         self, path,
         attr      = 'Young',
+        domain    = 'a',
         split     = SPLIT_TRAIN,
         transform = None,
-        seed      = None,
         **kwargs
     ):
         # pylint: disable=too-many-arguments
-        assert split in SPLITS
+        check_value_in_range(split, SPLITS, 'CelebaDataset: split')
+
+        if attr is None:
+            assert domain is None
+        else:
+            check_value_in_range(domain, DOMAINS, 'CelebaDataset: domain')
+
         super().__init__(**kwargs)
 
         self._path      = path
         self._root_imgs = os.path.join(path, SUBDIR_IMG)
         self._split     = split
         self._attr      = attr
-        self._prg       = None
-        self._imgs_a    = []
-        self._imgs_b    = []
-        self._len       = 0
+        self._domain    = domain
+        self._imgs      = []
         self._transform = transform
 
-        self.reseed(seed)
         self._collect_files()
-
-    def reseed(self, seed):
-        self._prg = np.random.default_rng(seed)
 
     def _collect_files(self):
         imgs_specs = CelebaDataset.load_image_specs(self._path)
 
-        imgs_a, imgs_b = CelebaDataset.partition_images(
-            imgs_specs, self._split, self._attr
+        imgs = CelebaDataset.partition_images(
+            imgs_specs, self._split, self._attr, self._domain
         )
 
-        self._imgs_a = [ os.path.join(self._root_imgs, x) for x in imgs_a ]
-        self._imgs_b = [ os.path.join(self._root_imgs, x) for x in imgs_b ]
-
-        self._len = max(len(self._imgs_a), len(self._imgs_b))
+        self._imgs = [ os.path.join(self._root_imgs, x) for x in imgs ]
 
     @staticmethod
     def load_image_partition(root):
@@ -87,34 +83,30 @@ class CelebaDataset(Dataset):
         return df_partition.join(df_attrs)
 
     @staticmethod
-    def partition_images(image_specs, split, attr):
+    def partition_images(image_specs, split, attr, domain):
         part_mask = (image_specs.partition == SPLITS[split])
 
         if attr is None:
-            imgs_a = image_specs[part_mask].index.to_list()
-            imgs_b = []
+            imgs = image_specs[part_mask].index.to_list()
         else:
-            mask_a = (image_specs[attr] > 0)
-            mask_b = ~mask_a
+            if domain == 'a':
+                domain_mask = (image_specs[attr] > 0)
+            else:
+                domain_mask = (image_specs[attr] < 0)
 
-            imgs_a = image_specs[part_mask & mask_a].index.to_list()
-            imgs_b = image_specs[part_mask & mask_b].index.to_list()
+            imgs = image_specs[part_mask & domain_mask].index.to_list()
 
-        return (imgs_a, imgs_b)
+        return imgs
 
     def __len__(self):
-        return self._len
-
-    def _sample_image(self, images, index):
-        return sample_image(
-            images, index, self._prg, randomize = (self._split == SPLIT_TRAIN)
-        )
+        return len(self._imgs)
 
     def __getitem__(self, index):
-        paths = [ self._sample_image(self._imgs_a, index) ]
+        path   = self._imgs[index]
+        result = default_loader(path)
 
-        if self._attr is not None:
-            paths.append(self._sample_image(self._imgs_b, index))
+        if self._transform is not None:
+            result = self._transform(result)
 
-        return load_images(paths, self._transform)
+        return result
 

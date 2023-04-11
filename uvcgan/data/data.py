@@ -3,101 +3,65 @@ import torch
 
 import torchvision
 
-from uvcgan.consts      import ROOT_DATA
-from .datasets.celeba   import CelebaDataset
-from .datasets.cyclegan import CycleGANDataset
-from .transforms        import select_transform
-from .utils             import imbalanced_collate
+from uvcgan.consts       import (
+    ROOT_DATA, SPLIT_TRAIN, MERGE_PAIRED, MERGE_UNPAIRED
+)
+from uvcgan.torch.select import extract_name_kwargs
 
-def worker_init_fn(_worker_id):
-    worker_seed = torch.initial_seed() % 2**32
-    worker_info = torch.utils.data.get_worker_info()
+from .datasets.celeba                 import CelebaDataset
+from .datasets.image_domain_folder    import ImageDomainFolder
+from .datasets.image_domain_hierarchy import ImageDomainHierarchy
+from .datasets.zipper                 import DatasetZipper
 
-    dataset = worker_info.dataset
+from .loader_zipper import DataLoaderZipper
+from .transforms    import select_transform
 
-    try:
-        dataset.reseed(worker_seed)
-    except AttributeError:
-        pass
-
-def load_cyclegan_datasets(transform_train, transform_val, path, **data_args):
-    dset_train = CycleGANDataset(
-        path, transform = transform_train, is_train = True, **data_args
-    )
-    dset_val = CycleGANDataset(
-        path, transform = transform_val, is_train = False, **data_args
-    )
-
-    return (dset_train, dset_val)
-
-def load_imagenet_datasets(transform_train, transform_val, path, **data_args):
-    dset_train = torchvision.datasets.ImageNet(
-        path, transform = transform_train, split = 'train', **data_args
-    )
-    dset_val = torchvision.datasets.ImageNet(
-        path, transform = transform_val, split = 'val', **data_args
-    )
-
-    return (dset_train, dset_val)
-
-def load_imagedir_datasets(transform_train, transform_val, path, **data_args):
-    dset_train = torchvision.datasets.ImageFolder(
-        os.path.join(path, 'train'), transform = transform_train, **data_args
-    )
-    dset_val = torchvision.datasets.ImageFolder(
-        os.path.join(path, 'val'), transform = transform_val, **data_args
-    )
-
-    return (dset_train, dset_val)
-
-def load_celeba_datasets(transform_train, transform_val, path, **data_args):
-    dset_train = CelebaDataset(
-        path, transform = transform_train, split = 'train', **data_args
-    )
-
-    dset_val = CelebaDataset(
-        path, transform = transform_val, split = 'test', **data_args
-    )
-
-    return (dset_train, dset_val)
-
-def select_datasets(
-    dataset, transform_train, transform_val, path = None, **dataset_args
-):
-    path = os.path.join(ROOT_DATA, path or dataset)
-
-    if dataset == 'celeba':
-        return load_celeba_datasets(
-            transform_train, transform_val, path, **dataset_args
+def select_dataset(name, path, split, transform, **kwargs):
+    if name == 'celeba':
+        return CelebaDataset(
+            path, transform = transform, split = split, **kwargs
         )
 
-    if dataset == 'cyclegan':
-        return load_cyclegan_datasets(
-            transform_train, transform_val, path, **dataset_args
+    if name in [ 'cyclegan', 'image-domain-folder' ]:
+        return ImageDomainFolder(
+            path, transform = transform, split = split, **kwargs
         )
 
-    if dataset == 'imagenet':
-        return load_imagenet_datasets(
-            transform_train, transform_val, path, **dataset_args
+    if name in [ 'image-domain-hierarchy' ]:
+        return ImageDomainHierarchy(
+            path, transform = transform, split = split, **kwargs
         )
 
-    if dataset in [ 'imagedir', 'image-folder' ]:
-        return load_imagedir_datasets(
-            transform_train, transform_val, path, **dataset_args
+    if name == 'imagenet':
+        return torchvision.datasets.ImageNet(
+            path, transform = transform, split = split, **kwargs
         )
 
-    raise ValueError(f"Unknown dataset: '{dataset}'")
+    if name in [ 'imagedir', 'image-folder' ]:
+        return torchvision.datasets.ImageFolder(
+            os.path.join(path, split), transform = transform, **kwargs
+        )
 
-def load_datasets(data_config):
-    transform_train = select_transform(data_config.transform_train)
-    transform_val   = select_transform(data_config.transform_val)
+    raise ValueError(f"Unknown dataset: {name}")
 
-    return select_datasets(
-        data_config.dataset, transform_train, transform_val,
-        **data_config.dataset_args
-    )
+def construct_single_dataset(dataset_config, split):
+    name, kwargs = extract_name_kwargs(dataset_config.dataset)
+    path         = os.path.join(ROOT_DATA, kwargs.pop('path', name))
 
-def construct_loader(
+    if split == SPLIT_TRAIN:
+        transform = select_transform(dataset_config.transform_train)
+    else:
+        transform = select_transform(dataset_config.transform_test)
+
+    return select_dataset(name, path, split, transform, **kwargs)
+
+def construct_datasets(data_config, split):
+    return [
+        construct_single_dataset(config, split)
+            for config in data_config.datasets
+    ]
+
+def construct_single_loader(
     dataset, batch_size, shuffle,
     workers         = None,
     prefetch_factor = 20,
@@ -108,22 +72,37 @@ def construct_loader(
 
     return torch.utils.data.DataLoader(
         dataset, batch_size,
-        shuffle            = shuffle,
-        num_workers        = workers,
-        drop_last          = False,
-        prefetch_factor    = prefetch_factor,
-        collate_fn         = imbalanced_collate,
-        worker_init_fn     = worker_init_fn,
+        shuffle         = shuffle,
+        num_workers     = workers,
+        prefetch_factor = prefetch_factor,
+        pin_memory      = True,
         **kwargs
     )
 
-def get_data(data_config, batch_size, workers):
-    datasets = load_datasets(data_config)
+def construct_data_loaders(data_config, batch_size, split):
+    datasets = construct_datasets(data_config, split)
+    shuffle  = (split == SPLIT_TRAIN)
 
-    (it_train, it_val) = [
-        construct_loader(x, batch_size, shuffle = (i == 0), workers = workers)
-        for (i,x) in enumerate(datasets)
+    if data_config.merge_type == MERGE_PAIRED:
+        dataset = DatasetZipper(datasets)
+
+        return construct_single_loader(
+            dataset, batch_size, shuffle, data_config.workers,
+            drop_last = False
+        )
+
+    loaders = [
+        construct_single_loader(
+            dataset, batch_size, shuffle, data_config.workers,
+            drop_last = (data_config.merge_type == MERGE_UNPAIRED)
+        ) for dataset in datasets
     ]
 
-    return (it_train, it_val)
+    if data_config.merge_type == MERGE_UNPAIRED:
+        return DataLoaderZipper(loaders)
+
+    if len(loaders) == 1:
+        return loaders[0]
+
+    return loaders
 
