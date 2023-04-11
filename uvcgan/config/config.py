@@ -5,7 +5,7 @@ import os
 from uvcgan.consts    import CONFIG_NAME
 
 from .config_base     import ConfigBase
-from .data_config     import DataConfig
+from .data_config     import parse_data_config
 from .model_config    import ModelConfig
 from .transfer_config import TransferConfig
 
@@ -18,7 +18,6 @@ class Config(ConfigBase):
         'batch_size',
         'data',
         'epochs',
-        'image_shape',
         'discriminator',
         'generator',
         'model',
@@ -37,7 +36,7 @@ class Config(ConfigBase):
         data             = None,
         data_args        = None,
         epochs           = 100,
-        image_shape      = (1, 128, 128),
+        image_shape      = None,
         discriminator    = None,
         generator        = None,
         model            = 'cyclegan',
@@ -48,17 +47,18 @@ class Config(ConfigBase):
         scheduler        = None,
         steps_per_epoch  = 250,
         transfer         = None,
+        workers          = None,
     ):
         # pylint: disable=too-many-arguments
         # pylint: disable=too-many-locals
+        self.data = parse_data_config(data, data_args, image_shape, workers)
+
         self.batch_size      = batch_size
-        self.data            = Config._init_dataset(data, data_args)
         self.model           = model
         self.model_args      = model_args or {}
         self.seed            = seed
         self.loss            = loss
         self.epochs          = epochs
-        self.image_shape     = image_shape
         self.scheduler       = scheduler
         self.steps_per_epoch = steps_per_epoch
 
@@ -72,25 +72,40 @@ class Config(ConfigBase):
             gradient_penalty = {}
 
         if transfer is not None:
-            transfer = TransferConfig(**transfer)
+            if isinstance(transfer, list):
+                transfer = [ TransferConfig(**conf) for conf in transfer ]
+            else:
+                transfer = TransferConfig(**transfer)
 
         self.discriminator    = discriminator
         self.generator        = generator
         self.gradient_penalty = gradient_penalty
         self.transfer         = transfer
 
-    @staticmethod
-    def _init_dataset(data, data_args):
-        if isinstance(data, str):
-            LOGGER.warning(
-                "Deprecation Warning: Old dataset configuration detected."
-                " Please modify your configuration and change `data` parameter"
-                " into a dictionary describing `DataConfig` structure."
-            )
-            return DataConfig(data, dataset_args = data_args)
+        Config._check_deprecated_args(image_shape, workers)
 
-        assert data_args is None
-        return DataConfig(**data)
+        if image_shape is not None:
+            self._validate_image_shape(image_shape)
+
+    @staticmethod
+    def _check_deprecated_args(image_shape, workers):
+        if image_shape is not None:
+            LOGGER.warning(
+                "Deprecation Warning: Deprecated `image_shape` configuration "
+                "parameter detected."
+            )
+
+        if workers is not None:
+            LOGGER.warning(
+                "Deprecation Warning: Deprecated `workers` configuration "
+                "parameter detected."
+            )
+
+    def _validate_image_shape(self, image_shape):
+        assert all(d.shape == image_shape for d in self.data.datasets), (
+            f"Value of the deprecated `image_shape` parameter {image_shape}"
+            f"does not match shapes of the datasets."
+        )
 
     def get_savedir(self, outdir, label = None):
         if label is None:
@@ -104,8 +119,8 @@ class Config(ConfigBase):
         if self.generator is not None:
             generator = self.generator.model
 
-        savedir = 'model_d(%s)_m(%s)_d(%s)_g(%s)_%s' % (
-            self.data.dataset, self.model, discriminator, generator, label
+        savedir = 'model_m(%s)_d(%s)_g(%s)_%s' % (
+            self.model, discriminator, generator, label
         )
 
         savedir = savedir.replace('/', ':')

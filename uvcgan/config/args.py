@@ -21,14 +21,12 @@ class Args:
         'savedir',
         'checkpoint',
         'log_level',
-        'workers',
     ]
 
     def __init__(
         self, config, savedir, label,
         log_level  = 'INFO',
         checkpoint = 100,
-        workers    = None
     ):
         # pylint: disable=too-many-arguments
         self.config     = config
@@ -36,7 +34,6 @@ class Args:
         self.savedir    = savedir
         self.checkpoint = checkpoint
         self.log_level  = log_level
-        self.workers    = workers
 
     def __getattr__(self, attr):
         return getattr(self.config, attr)
@@ -63,11 +60,9 @@ class Args:
 
             raise RuntimeError(
                 (
-                    "Config collision detected in '%s'."
-                    " Current config\n%s\n"
-                    "does not match saved config\n%s\n"
-                    "Difference:\n%s"
-                ) % (self.savedir, new, old, diff)
+                    f"Config collision detected in '{self.savedir}'"
+                    f" . Difference:\n{diff}"
+                )
             )
 
     @staticmethod
@@ -76,13 +71,12 @@ class Args:
         label      = None,
         log_level  = 'INFO',
         checkpoint = 100,
-        workers    = None,
         **args_dict
     ):
         config  = Config(**args_dict)
         savedir = config.get_savedir(outdir, label)
 
-        result = Args(config, savedir, label, log_level, checkpoint, workers)
+        result = Args(config, savedir, label, log_level, checkpoint)
         result.check_no_collision()
 
         result.save()
