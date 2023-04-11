@@ -2,6 +2,7 @@
 # NOTE: Mistaken lint:
 # E1102: self.encoder is not callable (not-callable)
 from uvcgan.torch.select             import select_optimizer, select_loss
+from uvcgan.torch.background_penalty import BackgroundPenaltyReduction
 from uvcgan.torch.image_masking      import select_masking
 from uvcgan.models.generator         import construct_generator
 
@@ -80,7 +81,7 @@ class Autoencoder(ModelBase):
 
     def __init__(
         self, savedir, config, is_train, device,
-        joint = False, masking = None
+        joint = False, background_penalty = None, masking = None
     ):
         # pylint: disable=too-many-arguments
         self.joint   = joint
@@ -91,8 +92,19 @@ class Autoencoder(ModelBase):
 
         super().__init__(savedir, config, is_train, device)
 
+        if background_penalty is None:
+            self.background_penalty = None
+        else:
+            self.background_penalty = BackgroundPenaltyReduction(
+                **background_penalty
+            )
+
         assert config.discriminator is None, \
             "Autoencoder model does not use discriminator"
+
+    def _handle_epoch_end(self):
+        if self.background_penalty is not None:
+            self.background_penalty.end_epoch(self.epoch)
 
     def _set_input(self, inputs, domain):
         set_two_domain_input(self.images, inputs, domain, self.device)
@@ -124,6 +136,9 @@ class Autoencoder(ModelBase):
                 self.images.reco_b = self.models.encoder_b(input_b)
 
     def backward_generator_base(self, real, reco):
+        if self.background_penalty is not None:
+            reco = self.background_penalty(reco, real)
+
         loss = self.loss_fn(reco, real)
         loss.backward()
 
