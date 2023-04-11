@@ -22,3 +22,16 @@ def join_dicts(*dicts_list):
 
     return base_dict
 
+def check_value_in_range(value, value_range, hint = None):
+    if value in value_range:
+        return
+
+    msg = ''
+
+    if hint is not None:
+        msg = hint + ' '
+
+    msg += f"value '{value}' is not range {value_range}"
+
+    raise ValueError(msg)
+

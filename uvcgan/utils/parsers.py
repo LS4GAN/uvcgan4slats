@@ -1,16 +1,18 @@
-from .model_state import LABEL_TRAIN, LABEL_EVAL
+from uvcgan.consts import (
+    MODEL_STATE_TRAIN, MODEL_STATE_EVAL, SPLIT_TRAIN, SPLIT_TEST, SPLIT_VAL
+)
 
 def add_model_state_parser(parser):
     parser.add_argument(
         '--model-state',
-        choices = [ LABEL_TRAIN, LABEL_EVAL ],
+        choices = [ MODEL_STATE_TRAIN, MODEL_STATE_EVAL ],
         default = 'eval',
         dest    = 'model_state',
         help    = "evaluate model in 'train' or 'eval' states",
         type    = str,
     )
 
-def add_plot_extension_parser(parser, default = ( 'png', 'pdf' )):
+def add_plot_extension_parser(parser, default = ( 'png', )):
     parser.add_argument(
         '-e', '--ext',
         default = None if default is None else list(default),
@@ -45,6 +47,16 @@ def add_eval_type_parser(parser, default = 'transfer'):
         default = default,
         dest    = 'eval_type',
         help    = 'type of evaluation',
+        type    = str,
+    )
+
+def add_split_parser(parser, default = SPLIT_TEST):
+    parser.add_argument(
+        '--split',
+        choices = [ SPLIT_TRAIN, SPLIT_TEST, SPLIT_VAL ],
+        default = default,
+        dest    = 'split',
+        help    = 'data split',
         type    = str,
     )
 
@@ -90,6 +102,7 @@ def add_standard_eval_parsers(
 ):
     add_model_directory_parser(parser)
     add_model_state_parser(parser)
+    add_split_parser(parser)
 
     add_batch_size_parser(parser, default_batch_size)
     add_eval_epoch_parser(parser, default_epoch)
