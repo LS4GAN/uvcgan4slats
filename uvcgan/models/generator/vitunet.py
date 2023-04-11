@@ -11,7 +11,8 @@ class ViTUNetGenerator(nn.Module):
 
     def __init__(
         self, features, n_heads, n_blocks, ffn_features, embed_features,
-        activ, norm, image_shape, unet_features_list, unet_activ, unet_norm,
+        activ, norm, input_shape, output_shape,
+        unet_features_list, unet_activ, unet_norm,
         unet_downsample = 'conv',
         unet_upsample   = 'upsample-conv',
         unet_rezero     = False,
@@ -21,6 +22,9 @@ class ViTUNetGenerator(nn.Module):
     ):
         # pylint: disable = too-many-locals
         super().__init__(**kwargs)
+
+        assert input_shape == output_shape
+        image_shape = input_shape
 
         self.image_shape = image_shape
 
@@ -43,6 +47,5 @@ class ViTUNetGenerator(nn.Module):
     def forward(self, x):
         # x : (N, C, H, W)
         result = self.net(x)
-
         return self.output(result)
 

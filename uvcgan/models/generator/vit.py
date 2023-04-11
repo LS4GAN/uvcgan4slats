@@ -13,10 +13,13 @@ class ViTGenerator(nn.Module):
 
     def __init__(
         self, features, n_heads, n_blocks, ffn_features, embed_features,
-        activ, norm, image_shape, token_size, rescale = False, rezero = True,
-        **kwargs
+        activ, norm, input_shape, output_shape, token_size,
+        rescale = False, rezero = True, **kwargs
     ):
         super().__init__(**kwargs)
+
+        assert input_shape == output_shape
+        image_shape = input_shape
 
         self.image_shape    = image_shape
         self.token_size     = token_size
