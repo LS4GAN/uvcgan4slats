@@ -3,10 +3,12 @@ import math
 from itertools import islice
 
 from uvcgan.config            import Args
-from uvcgan.data              import get_data
+from uvcgan.consts            import (
+    MODEL_STATE_TRAIN, MODEL_STATE_EVAL, MERGE_NONE
+)
+from uvcgan.data              import construct_data_loaders
 from uvcgan.torch.funcs       import get_torch_device_smart, seed_everything
 from uvcgan.cgan              import construct_model
-from uvcgan.utils.model_state import ModelState
 
 def slice_data_loader(loader, batch_size, n_samples = None):
     if n_samples is None:
@@ -44,11 +46,20 @@ def get_evaldir(root, epoch, mkdir = False):
 
     return result
 
-def start_model_eval(path, epoch, model_state, **config_overrides):
+def set_model_state(model, state):
+    if state == MODEL_STATE_TRAIN:
+        model.train()
+    elif state == MODEL_STATE_EVAL:
+        model.eval()
+    else:
+        raise ValueError(f"Unknown model state '{state}'")
+
+def start_model_eval(path, epoch, model_state, merge_type, **config_overrides):
     args   = Args.load(path)
     device = get_torch_device_smart()
 
     override_config(args.config, config_overrides)
+    args.config.data.merge_type = merge_type
 
     model = construct_model(
         args.savedir, args.config, is_train = False, device = device
@@ -62,22 +73,36 @@ def start_model_eval(path, epoch, model_state, **config_overrides):
     seed_everything(args.config.seed)
     model.load(epoch)
 
-    model_state.set_model_state(model)
+    set_model_state(model, model_state)
     evaldir = get_evaldir(path, epoch, mkdir = True)
 
     return (args, model, evaldir)
 
-def load_eval_model_dset_from_cmdargs(cmdargs, **config_overrides):
-    model_state = ModelState.from_str(cmdargs.model_state)
-
+def load_eval_model_dset_from_cmdargs(
+    cmdargs, merge_type = MERGE_NONE, **config_overrides
+):
     args, model, evaldir = start_model_eval(
-        cmdargs.model, cmdargs.epoch, model_state,
+        cmdargs.model, cmdargs.epoch, cmdargs.model_state,
+        merge_type = merge_type,
         batch_size = cmdargs.batch_size, **config_overrides
     )
 
-    _, it_val = get_data(
-        args.config.data, args.config.batch_size, args.workers
+    data_it = construct_data_loaders(
+        args.config.data, args.config.batch_size, split = cmdargs.split
     )
 
-    return (args, model, it_val, evaldir)
+    return (args, model, data_it, evaldir)
+
+def get_eval_savedir(evaldir, prefix, model_state, split, mkdir = False):
+    result = os.path.join(evaldir, f'{prefix}_{model_state}-{split}')
+
+    if mkdir:
+        os.makedirs(result, exist_ok = True)
+
+    return result
+
+def make_image_subdirs(model, savedir):
+    for name in model.images:
+        path = os.path.join(savedir, name)
+        os.makedirs(path, exist_ok = True)
 
