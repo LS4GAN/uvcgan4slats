@@ -17,6 +17,8 @@ from uvcgan.models.discriminator import construct_discriminator
 from uvcgan.models.generator     import construct_generator
 
 from .model_base import ModelBase
+from .named_dict import NamedDict
+from .funcs import set_two_domain_input
 
 class CycleGANModel(ModelBase):
     # pylint: disable=too-many-instance-attributes
@@ -27,24 +29,37 @@ class CycleGANModel(ModelBase):
         if self.is_train and self.lambda_idt > 0:
             images += [ 'idt_a', 'idt_b' ]
 
-        for img_name in images:
-            self.images[img_name] = None
+        return NamedDict(*images)
 
     def _setup_models(self, config):
-        self.models.gen_ab = construct_generator(
-            config.generator, config.image_shape, self.device
+        models = {}
+
+        models['gen_ab'] = construct_generator(
+            config.generator,
+            config.data.datasets[0].shape,
+            config.data.datasets[1].shape,
+            self.device
         )
-        self.models.gen_ba = construct_generator(
-            config.generator, config.image_shape, self.device
+        models['gen_ba'] = construct_generator(
+            config.generator,
+            config.data.datasets[1].shape,
+            config.data.datasets[0].shape,
+            self.device
         )
 
         if self.is_train:
-            self.models.disc_a = construct_discriminator(
-                config.discriminator, config.image_shape, self.device
+            models['disc_a'] = construct_discriminator(
+                config.discriminator,
+                config.data.datasets[0].shape,
+                self.device
             )
-            self.models.disc_b = construct_discriminator(
-                config.discriminator, config.image_shape, self.device
+            models['disc_b'] = construct_discriminator(
+                config.discriminator,
+                config.data.datasets[1].shape,
+                self.device
             )
+
+        return NamedDict(**models)
 
     def _setup_losses(self, config):
         losses = [
@@ -54,11 +69,12 @@ class CycleGANModel(ModelBase):
         if self.is_train and self.lambda_idt > 0:
             losses += [ 'idt_a', 'idt_b' ]
 
-        for loss in losses:
-            self.losses[loss] = None
+        return NamedDict(*losses)
 
     def _setup_optimizers(self, config):
-        self.optimizers.gen = select_optimizer(
+        optimizers = NamedDict('gen', 'disc')
+
+        optimizers.gen = select_optimizer(
             itertools.chain(
                 self.models.gen_ab.parameters(),
                 self.models.gen_ba.parameters()
@@ -66,13 +82,15 @@ class CycleGANModel(ModelBase):
             config.generator.optimizer
         )
 
-        self.optimizers.disc = select_optimizer(
+        optimizers.disc = select_optimizer(
             itertools.chain(
                 self.models.disc_a.parameters(),
                 self.models.disc_b.parameters()
             ),
             config.discriminator.optimizer
         )
+
+        return optimizers
 
     def __init__(
         self, savedir, config, is_train, device, pool_size = 50,
@@ -82,6 +100,9 @@ class CycleGANModel(ModelBase):
         self.lambda_a   = lambda_a
         self.lambda_b   = lambda_b
         self.lambda_idt = lambda_idt
+
+        assert len(config.data.datasets) == 2, \
+            "CycleGAN expects a pair of datasets"
 
         super().__init__(savedir, config, is_train, device)
 
@@ -94,15 +115,8 @@ class CycleGANModel(ModelBase):
             self.pred_a_pool = ImagePool(pool_size)
             self.pred_b_pool = ImagePool(pool_size)
 
-    def set_input(self, inputs):
-        def maybe_get(batch, device):
-            if batch is None:
-                return None
-
-            return batch.to(device)
-
-        self.images.real_a = maybe_get(inputs[0], self.device)
-        self.images.real_b = maybe_get(inputs[1], self.device)
+    def _set_input(self, inputs, domain):
+        set_two_domain_input(self.images, inputs, domain, self.device)
 
     def forward(self):
         def simple_fwd(batch, gen_fwd, gen_bkw):

@@ -21,33 +21,36 @@ class ModelBase:
     # pylint: disable=too-many-instance-attributes
 
     def __init__(self, savedir, config, is_train, device):
-        self.is_train     = is_train
-        self.device       = device
-        self.savedir      = savedir
+        self.is_train = is_train
+        self.device   = device
+        self.savedir  = savedir
 
-        self.models       = NamedDict()
-        self.images       = NamedDict()
-        self.optimizers   = NamedDict()
-        self.schedulers   = NamedDict()
-        self.losses       = NamedDict()
-        self.metric       = 0
-        self.epoch        = 0
+        self.models = self._setup_models(config)
+        self.images = self._setup_images(config)
+        self.losses = self._setup_losses(config)
+        self.metric = 0
+        self.epoch  = 0
 
-        self._setup_images(config)
-        self._setup_models(config)
-        self._setup_losses(config)
+        self.optimizers = NamedDict()
+        self.schedulers = NamedDict()
 
         if is_train:
-            self._setup_optimizers(config)
-            self._setup_schedulers(config)
+            self.optimizers = self._setup_optimizers(config)
+            self.schedulers = self._setup_schedulers(config)
 
-    def set_input(self, inputs):
-        raise NotImplementedError
+    def set_input(self, inputs, domain = None):
+        for key in self.images:
+            self.images[key] = None
+
+        self._set_input(inputs, domain)
 
     def forward(self):
         raise NotImplementedError
 
     def optimization_step(self):
+        raise NotImplementedError
+
+    def _set_input(self, inputs, domain):
         raise NotImplementedError
 
     def _setup_images(self, config):
@@ -63,8 +66,12 @@ class ModelBase:
         raise NotImplementedError
 
     def _setup_schedulers(self, config):
-        for (name,opt) in self.optimizers.items():
-            self.schedulers[name] = get_scheduler(opt, config.scheduler)
+        schedulers = { }
+
+        for (name, opt) in self.optimizers.items():
+            schedulers[name] = get_scheduler(opt, config.scheduler)
+
+        return NamedDict(**schedulers)
 
     def _save_model_state(self, epoch):
         pass
@@ -72,14 +79,18 @@ class ModelBase:
     def _load_model_state(self, epoch):
         pass
 
-    def _handle_epoch_end(self, epoch):
+    def _handle_epoch_end(self):
         pass
 
     def eval(self):
+        self.is_train = False
+
         for model in self.models.values():
             model.eval()
 
     def train(self):
+        self.is_train = True
+
         for model in self.models.values():
             model.train()
 
@@ -102,6 +113,7 @@ class ModelBase:
 
         self.epoch = epoch
         self._load_model_state(epoch)
+        self._handle_epoch_end()
 
     def save(self, epoch = None):
         LOGGER.debug('Saving model at epoch %s', epoch)
@@ -114,12 +126,15 @@ class ModelBase:
 
     def end_epoch(self, epoch = None):
         for scheduler in self.schedulers.values():
+            if scheduler is None:
+                continue
+
             if isinstance(scheduler, ReduceLROnPlateau):
                 scheduler.step(self.metric)
             else:
                 scheduler.step()
 
-        self._handle_epoch_end(epoch)
+        self._handle_epoch_end()
 
         if epoch is None:
             self.epoch = self.epoch + 1

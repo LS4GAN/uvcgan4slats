@@ -15,70 +15,85 @@ from uvcgan.models.discriminator import construct_discriminator
 from uvcgan.models.generator     import construct_generator
 
 from .model_base import ModelBase
+from .named_dict import NamedDict
+from .funcs import set_two_domain_input
 
 class Pix2PixModel(ModelBase):
 
     def _setup_images(self, _config):
-        images = [ 'real_a', 'fake_b', 'real_b', 'fake_a', ]
-
-        for img_name in images:
-            self.images[img_name] = None
+        return NamedDict('real_a', 'fake_b', 'real_b', 'fake_a')
 
     def _setup_models(self, config):
-        self.models.gen_ab = construct_generator(
-            config.generator, config.image_shape, self.device
+        models = { }
+
+        image_shape_a = config.data.datasets[0].shape
+        image_shape_b = config.data.datasets[1].shape
+
+        assert image_shape_a[1:] == image_shape_b[1:], \
+            "Pix2Pix needs images in both domains to have the same size"
+
+        models['gen_ab'] = construct_generator(
+            config.generator, image_shape_a, image_shape_b, self.device
         )
-        self.models.gen_ba = construct_generator(
-            config.generator, config.image_shape, self.device
+        models['gen_ba'] = construct_generator(
+            config.generator, image_shape_b, image_shape_a, self.device
         )
 
         if self.is_train:
             extended_image_shape = (
-                2 * config.image_shape[0], *config.image_shape[1:]
+                image_shape_a[0] + image_shape_b[0], *image_shape_a[1:]
             )
 
-            self.models.disc_a = construct_discriminator(
-                config.discriminator, extended_image_shape, self.device
-            )
-            self.models.disc_b = construct_discriminator(
-                config.discriminator, extended_image_shape, self.device
-            )
+            for name in [ 'disc_a', 'disc_b' ]:
+                models[name] = construct_discriminator(
+                    config.discriminator, extended_image_shape, self.device
+                )
+
+        return NamedDict(**models)
 
     def _setup_losses(self, config):
-        losses = [ 'gen_ab', 'gen_ba', 'l1_ab', 'l1_ba', 'disc_a', 'disc_b' ]
-
-        for loss in losses:
-            self.losses[loss] = None
+        return NamedDict(
+            'gen_ab', 'gen_ba', 'l1_ab', 'l1_ba', 'disc_a', 'disc_b'
+        )
 
     def _setup_optimizers(self, config):
-        self.optimizers.gen_ab = select_optimizer(
+        optimizers = NamedDict('gen_ab', 'gen_ba', 'disc_a', 'disc_b')
+
+        optimizers.gen_ab = select_optimizer(
             self.models.gen_ab.parameters(), config.generator.optimizer
         )
-        self.optimizers.gen_ba = select_optimizer(
+        optimizers.gen_ba = select_optimizer(
             self.models.gen_ba.parameters(), config.generator.optimizer
         )
 
-        self.optimizers.disc_a = select_optimizer(
+        optimizers.disc_a = select_optimizer(
             self.models.disc_a.parameters(), config.discriminator.optimizer
         )
-        self.optimizers.disc_b = select_optimizer(
+        optimizers.disc_b = select_optimizer(
             self.models.disc_b.parameters(), config.discriminator.optimizer
         )
 
+        return optimizers
+
     def __init__(self, savedir, config, is_train, device):
         super().__init__(savedir, config, is_train, device)
+
+        assert len(config.data.datasets) == 2, \
+            "Pix2Pix expects a pair of datasets"
 
         self.criterion_gan    = GANLoss(config.loss).to(self.device)
         self.criterion_l1     = torch.nn.L1Loss()
         self.gradient_penalty = config.gradient_penalty
 
-    def set_input(self, inputs):
-        self.images.real_a = inputs[0].to(self.device)
-        self.images.real_b = inputs[1].to(self.device)
+    def _set_input(self, inputs, domain):
+        set_two_domain_input(self.images, inputs, domain, self.device)
 
     def forward(self):
-        self.images.fake_b = self.models.gen_ab(self.images.real_a)
-        self.images.fake_a = self.models.gen_ba(self.images.real_b)
+        if self.images.real_a is not None:
+            self.images.fake_b = self.models.gen_ab(self.images.real_a)
+
+        if self.images.real_b is not None:
+            self.images.fake_a = self.models.gen_ba(self.images.real_b)
 
     def backward_discriminator_base(self, model, real, fake, preimage):
         cond_real = torch.cat([real, preimage], dim = 1)

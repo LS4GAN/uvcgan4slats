@@ -41,6 +41,9 @@ def get_save_path(savedir, name, epoch, mkdir = False):
 
 def save(named_dict, savedir, prefix, epoch = None):
     for (k,v) in named_dict.items():
+        if v is None:
+            continue
+
         save_path = get_save_path(
             savedir, prefix + '_' + k, epoch, mkdir = True
         )
@@ -52,6 +55,9 @@ def save(named_dict, savedir, prefix, epoch = None):
 
 def load(named_dict, savedir, prefix, epoch, device):
     for (k,v) in named_dict.items():
+        if v is None:
+            continue
+
         load_path = get_save_path(
             savedir, prefix + '_' + k, epoch, mkdir = False
         )

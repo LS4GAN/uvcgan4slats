@@ -3,8 +3,14 @@ from uvcgan.torch.image_masking      import select_masking
 from uvcgan.models.generator         import construct_generator
 
 from .model_base import ModelBase
+from .named_dict import NamedDict
 
 class SimpleAutoencoder(ModelBase):
+    """Model that tries to train an autoencoder (i.e. target == input).
+
+    This autoencoder expects inputs to be either tuples of the form
+    `(features, target)` or the `features` itself.
+    """
 
     def _setup_images(self, _config):
         images = [ 'real', 'reco' ]
@@ -12,24 +18,31 @@ class SimpleAutoencoder(ModelBase):
         if self.masking is not None:
             images.append('masked')
 
-        for img_name in images:
-            self.images[img_name] = None
+        return NamedDict(*images)
 
     def _setup_models(self, config):
-        self.models.encoder = construct_generator(
-            config.generator, config.image_shape, self.device
+        return NamedDict(
+            encoder = construct_generator(
+                config.generator,
+                config.data.datasets[0].shape,
+                config.data.datasets[0].shape,
+                self.device
+            )
         )
 
     def _setup_losses(self, config):
-        self.losses['loss'] = None
         self.loss_fn = select_loss(config.loss)
 
         assert config.gradient_penalty is None, \
             "Autoencoder model does not support gradient penalty"
 
+        return NamedDict('loss')
+
     def _setup_optimizers(self, config):
-        self.optimizers.encoder = select_optimizer(
-            self.models.encoder.parameters(), config.generator.optimizer
+        return NamedDict(
+            encoder = select_optimizer(
+                self.models.encoder.parameters(), config.generator.optimizer
+            )
         )
 
     def __init__(
@@ -37,13 +50,20 @@ class SimpleAutoencoder(ModelBase):
     ):
         # pylint: disable=too-many-arguments
         self.masking = select_masking(masking)
+        assert len(config.data.datasets) == 1, \
+            "Simple Autoencoder can work only with a single dataset"
+
         super().__init__(savedir, config, is_train, device)
 
         assert config.discriminator is None, \
             "Autoencoder model does not use discriminator"
 
-    def set_input(self, inputs):
-        self.images.real = inputs[0].to(self.device)
+    def _set_input(self, inputs, _domain):
+        # inputs : image or (image, label)
+        if isinstance(inputs, (list, tuple)):
+            self.images.real = inputs[0].to(self.device)
+        else:
+            self.images.real = inputs.to(self.device)
 
     def forward(self):
         if self.masking is None:
