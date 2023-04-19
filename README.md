@@ -9,8 +9,8 @@
 **Anoucement:tada::tada::** We published a upgraded version of `UVCGAN`, called `UVCGANv2` ([paper](https://arxiv.org/abs/2303.16280), [repo](https://github.com/LS4GAN/uvcgan2)), that can generate even greater translations on the CelebA and AFHQ datasets. Feel free to check it out, too. Later, we will also adapt `UVCGANv2` and test it on scientific datasets.
 
 ## Download SLATS data and pre-trained models
-- Download pretrained [translator models](https://zenodo.org/deposit/7809460#) from Zenodo
 - Download the [SLATS dataset](https://zenodo.org/record/7809108#.ZDQ9AHbMK3A) from Zenodo
+- Download pretrained [translator models](https://zenodo.org/deposit/7809460#) from Zenodo
 
 ## Run inference with pretrained translator models
 
