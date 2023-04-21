@@ -57,10 +57,10 @@ export UVCGAN_DATA=/PATH/TO/DATASET
 export UVCGAN_OUTDIR=/PATH/TO/OUTDIR
 ```
 
-## Download SLATS data and pre-trained models
+# Download SLATS data and pre-trained models
 One can download the [datasets](https://zenodo.org/record/7809108) and pretrained [models](https://zenodo.org/deposit/7809460) 
-directly from the Zenodo website, or run the downloading scripts:
-- datasets: 
+directly from the Zenodo website, or use the downloading scripts.
+- **Datasets**: 
   - `./scripts/download_slats_datasets.sh tiles` for SLATS tiles (256 x 256 images)
   - `./scripts/download_slats_datasets.sh center_crops` for SLATS center crops (768 x 5888 images)
   
@@ -68,10 +68,10 @@ directly from the Zenodo website, or run the downloading scripts:
   
   Note that the SLATS center crops are not used for training UVCGAN. 
   We provide the dataset so you can try developing more efficient and powerful networks for much larger images :wink:
-- pre-trained models: `./scripts/download_slats_models.sh`
+- **Pre-trained Models**: `./scripts/download_slats_models.sh`
   The downloaded files will be saved at `${UVCGAN_OUTDIR}/slats/` or `./outdir/slats/` if `UVCGAN_OUTDIR` is unset.
 
-## Run inference with pretrained translator models
+# Run inference with pretrained translator models
 
 ## Train your own model
 In this part, we demonstrate how to try your own model using training on SLATS as an example. 
