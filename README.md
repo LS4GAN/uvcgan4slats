@@ -30,7 +30,7 @@ To install the `uvcgan4slats` package, simply run the following command from the
 python setup.py develop --user
 ```
 
-## Dependence:
+## Dependencies:
 
 The working of uvcgan4slats dependes on the `toytools` package. 
 Download and install the package by running the following commands (in the `uvcgan` conda environment)
@@ -58,8 +58,8 @@ export UVCGAN_OUTDIR=/PATH/TO/OUTDIR
 ```
 
 ## Download SLATS data and pre-trained models
-- Download the [SLATS dataset](https://zenodo.org/record/7809108#.ZDQ9AHbMK3A) from Zenodo
-- Download pretrained [translator models](https://zenodo.org/deposit/7809460#) from Zenodo
+- Download the [SLATS dataset](https://zenodo.org/record/7809108) from Zenodo
+- Download pretrained [translator models](https://zenodo.org/deposit/7809460) from Zenodo
 
 ## Run inference with pretrained translator models
 
