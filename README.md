@@ -58,8 +58,15 @@ export UVCGAN_OUTDIR=/PATH/TO/OUTDIR
 ```
 
 ## Download SLATS data and pre-trained models
-- Download the [SLATS dataset](https://zenodo.org/record/7809108) from Zenodo
-- Download pretrained [translator models](https://zenodo.org/deposit/7809460) from Zenodo
+One can download the [datasets](https://zenodo.org/record/7809108) and pretrained [models](https://zenodo.org/deposit/7809460) 
+directly from the Zenodo website, or run the downloading scripts:
+- datasets: 
+  - `./scripts/download_slats_datasets.sh tiles` for SLATS tiles (256 x 256 images)
+  - `./scripts/download_slats_datasets.sh center_crops` for SLATS center crops (768 x 5888 images)
+  
+  Note that the SLATS center crops are not used for training UVCGAN. 
+  We provide the dataset so you can try developing more efficient and powerful networks for much larger images :wink:
+- pre-trained models: `./scripts/download_slats_models.sh`
 
 ## Run inference with pretrained translator models
 
