@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-OUTDIR="${UVCGAN_OUTDIR:-outdir}"
-ZENODO_BASE="https://zenodo.org/record/7809460/"
+OUTROOT="${UVCGAN_OUTDIR:-outdir}"
+OUTDIR="${OUTROOT}/slats/pretrained"
+ZENODO_BASE="https://zenodo.org/record/7853835/"
 
 declare -A CHECKSUMS=(
-    [config.json]=ae309b5808f2dea3a15175ec6b60f4bf
+    [config.json]=4cb0a39f87c36af28766a63188f55591
     [net_gen_ab.pth]=416abd1c9e113bca24509484ddc3f466
     [net_gen_ba.pth]=b57580f84577bf4ff3a271497b373cf3
 )
@@ -46,7 +47,7 @@ calc_md5_hash ()
 download_and_check ()
 {
     local filename="${1}"
-    local dest="${OUTDIR}/slats/${filename}"
+    local dest="${OUTDIR}/${filename}"
     local url="${ZENODO_BASE}/files/${filename}"
     exec_or_die wget "${url}" --output-document "${dest}"
 
@@ -86,7 +87,7 @@ check_model_exists ()
 
 download_slats_models ()
 {
-    local folder="${OUTDIR}/slats"
+    local folder="${OUTDIR}"
 
     check_model_exists "${folder}"
 

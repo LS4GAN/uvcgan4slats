@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
-DATADIR="${UVCGAN_DATA:-data}"
+DATAROOT="${UVCGAN_DATA:-data}"
+DATADIR="${DATAROOT}/slats"
+
 
 declare -A URL_LIST=(
-    [slats_tiles]="https://zenodo.org/record/7809108/files/slats_tiles.zip"
-    [slats_center_crops]="https://zenodo.org/record/7809108/files/slats_center_crops.zip"
+    [tiles]="https://zenodo.org/record/7809108/files/slats_tiles.zip"
+    [center_crops]="https://zenodo.org/record/7809108/files/slats_center_crops.zip"
 )
 
 declare -A CHECKSUMS=(
-    [slats_tiles]="fcab8ff8525bcb00a9aa33b604fb11ff"
-    [slats_center_crops]="2a064cd4fd0b7a1bb8142c1846d03e9e"
+    [tiles]="fcab8ff8525bcb00a9aa33b604fb11ff"
+    [center_crops]="2a064cd4fd0b7a1bb8142c1846d03e9e"
 )
 
 die ()
@@ -21,8 +23,8 @@ die ()
 usage ()
 {
     cat <<EOF
-USAGE: download_dataset.sh DATASET
-where DATASET is one of slats_tiles and slats_center_crops.
+USAGE: download_slats_datasets.sh DATASET
+where DATASET is one of tiles and center_crops.
 EOF
 
     if [[ $# -gt 0 ]]
@@ -44,17 +46,17 @@ calc_md5_hash ()
     md5sum "${path}" | cut -d ' ' -f 1 | tr -d '\n'
 }
 
-download_archive ()
+download_and_check ()
 {
     local url="${1}"
-    local archive="${2}"
+    local fname="${2}"
     local checksum="${3}"
 
     exec_or_die mkdir -p "${DATADIR}"
 
-    local path="${DATADIR}/${archive}"
+    local path="${DATADIR}/${fname}"
 
-    if [[ ! -e "${DATADIR}/${archive}" ]]
+    if [[ ! -e "${path}" ]]
     then
         exec_or_die wget "${url}" --output-document "${path}"
     fi
@@ -79,10 +81,10 @@ download_and_extract_zip ()
     local zip="${2}"
     local checksum="${3}"
 
-    download_archive  "${url}" "${zip}" "${checksum}"
+    download_and_check  "${url}" "${zip}" "${checksum}"
     exec_or_die unzip "${DATADIR}/${zip}" -d "${DATADIR}"
 
-    # exec_or_die rm "${dst}/${zip}"
+    exec_or_die rm -f "${DATADIR}/${zip}"
 
     echo " - Dataset is unpacked to '${path}'"
 }
@@ -106,37 +108,37 @@ check_dset_exists ()
     fi
 }
 
-download_slats_tiles ()
+download_tiles ()
 {
-    local url="${URL_LIST["slats_tiles"]}"
+    local url="${URL_LIST["tiles"]}"
     local zip="slats_tiles.zip"
     local path="${DATADIR}/slats_tiles"
 
     check_dset_exists "${path}"
 
-    download_and_extract_zip "${url}" "${zip}" "${CHECKSUMS[slats_tiles]}"
+    download_and_extract_zip "${url}" "${zip}" "${CHECKSUMS[tiles]}"
 }
 
-download_slats_center_crops ()
+download_center_crops ()
 {
-    local url="${URL_LIST["slats_center_crops"]}"
+    local url="${URL_LIST["center_crops"]}"
     local zip="slats_center_crops.zip"
     local path="${DATADIR}/slats_center_crops"
 
     check_dset_exists "${path}"
 
-    download_and_extract_zip "${url}" "${zip}" "${CHECKSUMS[slats_center_crops]}"
+    download_and_extract_zip "${url}" "${zip}" "${CHECKSUMS[center_crops]}"
 }
 
 
 dataset="${1}"
 
 case "${dataset}" in
-    slats_tiles)
-        download_slats_tiles
+    tiles)
+        download_tiles
         ;;
-    slats_center_crops)
-        download_slats_center_crops
+    center_crops)
+        download_center_crops
         ;;
     help|-h|--help)
         usage
