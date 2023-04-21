@@ -9,21 +9,21 @@ def parse_cmdargs():
         description = 'Train Slats translation'
     )
 
-    add_preset_name_parser(parser, 'gen',  GEN_PRESETS, 'uvcgan')
+    add_preset_name_parser(parser, 'gen',  GEN_PRESETS, 'uvcgan', help_msg='generator type')
 
     parser.add_argument(
         '--labmda-cycle', dest = 'lambda_cyc', type = float,
-        default = 1.0, help = 'magnitude of the cycle-consisntecy loss'
+        default = 1.0, help = 'magnitude of the cycle-consisntecy loss (default = 1.0)'
     )
 
     parser.add_argument(
         '--lr-disc', dest = 'lr_disc', type = float,
-        default = 5e-5, help = 'learning rate of the discriminator'
+        default = 5e-5, help = 'learning rate of the discriminator (default = 5e-5)'
     )
 
     parser.add_argument(
         '--lr-gen', dest = 'lr_gen', type = float,
-        default = 1e-5, help = 'learning rate of the generator'
+        default = 1e-5, help = 'learning rate of the generator (default = 1e-5)'
     )
 
     return parser.parse_args()

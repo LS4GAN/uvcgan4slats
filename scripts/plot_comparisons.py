@@ -13,7 +13,7 @@ from toytools.parsers import (
 from toytools.plot import (
     save_figure, default_image_plot, get_common_images_range
 )
-from toygan.utils.parsers import (
+from uvcgan.utils.parsers import (
     add_n_eval_samples_parser, add_plot_extension_parser
 )
 
