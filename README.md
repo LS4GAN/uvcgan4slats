@@ -69,7 +69,7 @@ directly from the Zenodo website, or use the downloading scripts.
   Note that the SLATS center crops are not used for training UVCGAN. 
   We provide the dataset so you can try developing more efficient and powerful networks for much larger images :wink:
 - **Pre-trained Models**: `./scripts/download_slats_models.sh`
-  The downloaded files will be saved at `${UVCGAN_OUTDIR}/slats/` or `./outdir/slats/` if `UVCGAN_OUTDIR` is unset.
+  The downloaded files will be saved at `${UVCGAN_OUTDIR}/slats/pretrained` or `./outdir/slats/pretrained` if `UVCGAN_OUTDIR` is unset.
 
 # Run inference with pretrained translator models
 
