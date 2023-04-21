@@ -1,3 +1,5 @@
+(in progress)
+
 # Unpaired Image Translation of the SLATS dataset with UVCGAN
 
 **Description:**
@@ -35,13 +37,10 @@ python setup.py develop --user
 The working of uvcgan4slats dependes on the `toytools` package. 
 Download and install the package by running the following commands (in the `uvcgan` conda environment)
 ```
-conda install matplotlib
 git clone https://github.com/LS4GAN/toytools
 cd toytools
-python3 setup.py develop --user
+python setup.py develop --user
 ```
-**to-does**:
-- [ ] hide the installation of matplotlib in `uvcgan4slats/contrib/conda_env.yml`
 
 
 ## Environment Setup
