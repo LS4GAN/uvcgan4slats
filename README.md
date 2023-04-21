@@ -70,19 +70,40 @@ directly from the Zenodo website, or use the downloading scripts.
 - **Pre-trained Models**: `./scripts/download_slats_models.sh`
   The downloaded files will be saved at `${UVCGAN_OUTDIR}/slats/pretrained` or `./outdir/slats/pretrained` if `UVCGAN_OUTDIR` is unset.
 
-# Run inference with pretrained translator models
+# Run inference with pretrained translators
+To run inference with pretrained translators, run the following command in the `uvcgan4slats` source folder
+```
+python scripts/translate_data.py PATH_TO_PRETRAINED_MODELS
+```
+If the pretrained models are downloaded using `./scripts/download_slats_models.sh`, `PATH_TO_PRETRAINED_MODELS` here is either `${UVCGAN_OUTDIR}/slats/pretrained` or `./outdir/slats/pretrained` if `UVCGAN_OUTDIR` is unset.
 
-## Train your own model
+The results are saved to `PATH_TO_PRETRAINED_MODELS/evals/final/ndarrays_eval-test`.
+There are 6 subfolders: 
+- `fake_a` and `fake_b`: translated images. 
+  More precisely, let `G_{a->b}` be the translator from domain `a` to domain `b` and let let `x_a` be an image from domain `a`, then `G_{a->b}(x_a)` will be found in `fake_b`.
+- `real_a` and `real_b`: true images from their respective domain
+- `reco_a` and `reco_b`: cyclically reconstructed images. 
+  More precisely, let `G_{a->b}` be the translator from domain `a` to domain `b`, and `G_{a->b}`, `b` to `a`. Let `x_a` be an image from domain `a`, then `G_{b->a}G_{a->b}(x_a)` will be found in `reco_a`. 
+
+We can use `./scripts/plot_comparisons.py` to compare pairs of images.
+Denote the result folder by `RESULT`, then we can run the following command to generate 20 plots comparing translations to the targets.
+**A Note about pairedness:**
+```
+python ./scripts/plot_comparisons.py RESULT/fake_b RESULT/real_b -n 20 --log --symmetric
+```
+We use `--log` here to plot in log scale and use `--symmetric` to indicate that the image values are symmetric around zero. (We need those two parameters for SLATS images, but it may not be case for other grayscaled images.)
+
+# Train your own model
 In this part, we demonstrate how to try your own model using training on SLATS as an example. 
 
-### Pretraining (optional but recommended)
+## Pretraining (optional but recommended)
 - pretraining configuration: 
 - pretraining command:
 
-### Training:
+## Training:
 - training configuration:
   - with pretrained generators:
   - from scratch:
 - training command:
 
-### Hyper-parameters that do make a difference and you may also consider to tune
+## Hyper-parameters that do make a difference and you may also consider to tune
