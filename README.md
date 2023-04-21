@@ -13,7 +13,7 @@
 
 ## Requirements
 
-`uvcgan` models were trained under the official `pytorch` container `pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime`. 
+`uvcgan4slats` models were trained under the official `pytorch` container `pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime`. 
 A similar training environment can be created by running the following command from the `uvcgan4slats` source folder.
 ```
 conda env create -f contrib/conda_env.yaml
@@ -64,9 +64,12 @@ directly from the Zenodo website, or run the downloading scripts:
   - `./scripts/download_slats_datasets.sh tiles` for SLATS tiles (256 x 256 images)
   - `./scripts/download_slats_datasets.sh center_crops` for SLATS center crops (768 x 5888 images)
   
+  The dataset will be saved at `${UVCGAN_DATA}/slats/slats_[tiles,center_crops]` or `./data/slats/slats_[tiles,center_crops]` if `UVCGAN_DATA` is unset.
+  
   Note that the SLATS center crops are not used for training UVCGAN. 
   We provide the dataset so you can try developing more efficient and powerful networks for much larger images :wink:
 - pre-trained models: `./scripts/download_slats_models.sh`
+  The downloaded files will be saved at `${UVCGAN_OUTDIR}/slats/` or `./data/slats/` if `UVCGAN_OUTDIR` is unset.
 
 ## Run inference with pretrained translator models
 
