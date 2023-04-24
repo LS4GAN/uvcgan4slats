@@ -102,19 +102,26 @@ We use `--log` here to plot in log scale and use `--symmetric` to indicate that 
 </p>
 
 # Train your own model
-In this part, we demonstrate how to try your own model using training on SLATS as an example. 
+In this part, we demonstrate how to train your UVCGAN model on your own data. We will use training on SLATS as an example. 
+If you 
 
 ## 1. Pretraining (optional but recommended)
-- pretraining configuration: 
-- pretraining command:
+- **configuration file**: [./scripts/slats/pretrain_slats-256.py](./scripts/slats/pretrain_slats-256.py) 
+- **command**: `python ./script/pretrain_slats-256.py`
+- **hyper-parameters**: generator type (`--gen`) and batch size (`--batch_size`) can be configured using command line flags. 
+All other parameters (e.g. generator/discriminator, optimizer, scheduler, masking, etc) can be modified directly in python script. 
 
 ## 2. Training:
 - training configuration:
-  - with pretrained generators:
+  - with pretrained generators: 
   - from scratch:
-- training command:
+- **command**: `python ./script/train_slats-256.py`
 
-## 3. Hyper-parameters that do make a difference and you may also consider to tune
+## 3. Hyper-parameters that may make a difference:
+1. generator type (`--gen`)
+1. cycle-consistency loss coefficient (`--lambda-cycle`)
+1. learning rate (`--lr-gen` and `--lr-disc`)
+1. 
 
 
 [uvcgan_paper]: https://openaccess.thecvf.com/content/WACV2023/html/Torbunov_UVCGAN_UNet_Vision_Transformer_Cycle-Consistent_GAN_for_Unpaired_Image-to-Image_Translation_WACV_2023_paper.html
