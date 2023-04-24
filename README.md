@@ -133,9 +133,9 @@ All other parameters (e.g. generator/discriminator, optimizer, scheduler, maskin
   - from scratch:  one can simply use the same script but remove the `transfer` from `args_dict` or set it to `None`. 
 - **command**: `python ./script/train_slats-256.py`
 - **Hyper-parameters that can potentially make a difference**: 
-  1. **cycle-consistency loss coefficient**: in section 3.1 of [uvcgan paper][uvcgan_paper], `--lambda-cycle` $=\lambda_{\textrm{cyc}}$ 
+  1. **cycle-consistency loss coefficient**: in section 3.1 of the [uvcgan paper][uvcgan_paper], we have `--lambda-cycle` $=\lambda_{\textrm{cyc}}$ 
   1. **learning rates**: `--lr-gen` and `--lr-disc`
-  1. **discriminator gradient penalty**: in section 3.3 of the [uvcgan paper][uvcgan_paper], `--gp-constant` $=\gamma$ and `--gp-lambda` $=\lambda_{\textrm{GP}}$ 
+  1. **discriminator gradient penalty**: in section 3.3 of the [uvcgan paper][uvcgan_paper], we have `--gp-constant` $=\gamma$ and `--gp-lambda` $=\lambda_{\textrm{GP}}$ 
   
   Consider tuning them for a better neural translator.
   
