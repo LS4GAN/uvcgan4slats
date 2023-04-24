@@ -1,4 +1,4 @@
-# Unpaired Image Translation of the SLATS dataset with UVCGAN
+# Unpaired Image Translation of the SLATS dataset with UVCGAN [Paper][uvcgan4slats_paper]
 
 In this repo, we discribe the application of the **UNet Vision Transformer cycle-consistent GAN, or UVCGAN**,  to a scientific dataset.
 `UVCGAN` ([Paper][uvcgan_paper], [repo][uvcgan_repo]) is a deep neural network algorithm we proposed for unpaired image-to-image (I2I) translation.
@@ -118,12 +118,13 @@ All other parameters (e.g. generator/discriminator, optimizer, scheduler, maskin
 - **command**: `python ./script/train_slats-256.py`
 
 ## 3. Hyper-parameters that may make a difference:
-1. generator type (`--gen`)
-1. cycle-consistency loss coefficient (`--lambda-cycle`)
-1. learning rate (`--lr-gen` and `--lr-disc`)
-1. 
+1. generator type: `--gen`
+1. cycle-consistency loss coefficient: `--lambda-cycle`
+1. learning rate: `--lr-gen` and `--lr-disc`
+1. gradient penalty: in section 3.3 of [uvcgan paper][uvcgan_paper], `--gp-constant` = $\gamma$ and `--gp-lambda` = $\lambda_{\textrm{GP}}$ 
 
 
+[uvcgan4slats_paper]: https://www.researchgate.net/publication/370024945_Unsupervised_Domain_Transfer_for_Science_Exploring_Deep_Learning_Methods_for_Translation_between_LArTPC_Detector_Simulations_with_Differing_Response_Models
 [uvcgan_paper]: https://openaccess.thecvf.com/content/WACV2023/html/Torbunov_UVCGAN_UNet_Vision_Transformer_Cycle-Consistent_GAN_for_Unpaired_Image-to-Image_Translation_WACV_2023_paper.html
 [uvcgan_repo]: https://github.com/LS4GAN/uvcgan
 [uvcgan2_paper]: https://arxiv.org/abs/2303.16280
