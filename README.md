@@ -106,8 +106,8 @@ We use `--log` here to plot in log scale and use `--symmetric` to indicate that 
 In this part, we demonstrate how to train your UVCGAN model on your own data. We will use training on SLATS as an example. 
 ## 0. Dataset
 - If you want to train UVCGAN on RGB images, consider using [UVCGAN][uvcgan_repo] or [UVCGAN2][uvcgan2_repo].
-- If you have a grayscale numpy array dataset:
-  - if no input/output transform are needed: you may be able to use the scripts for SLATS with no change except for dataset location and projects/folders naming. 
+- If you have a grayscale numpy (`.npz`) dataset :
+  - if no input/output transform are needed: you may start with reusing the scripts for SLATS with only change to [dataset location][dataset_location], [domain names][domain_names], [label][label], and [outdir][outdir].
   - if input/output transform are needed:
 
 In any case, your data should be organized as follows:
@@ -120,12 +120,13 @@ PATH/TO/YOUR/DATASET
     ├── DOMAIN_A
     └── DOMAIN_B
 ```
+where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and `DOMAIN_A` and `DOMAIN_B` are the [domain names][domain_names].
 
 ## 1. Pretraining (optional but recommended)
 - **configuration file**: [./scripts/slats/pretrain_slats-256.py](./scripts/slats/pretrain_slats-256.py) 
 - **command**: `python ./script/slats/pretrain_slats-256.py`
 - **hyper-parameters**: generator type (`--gen`) and batch size (`--batch_size`) can be configured using command line flags. 
-All other parameters (e.g. generator/discriminator, optimizer, scheduler, masking, etc) can be modified directly in python script. 
+All other parameters (e.g. generator/discriminator, optimizer, scheduler, masking, etc) can be modified directly in configuration file. 
 
 ## 2. Training:
 - **configuration file**: 
@@ -139,8 +140,16 @@ All other parameters (e.g. generator/discriminator, optimizer, scheduler, maskin
   
   Consider tuning them for a better neural translator.
   
+
+
+
 [uvcgan4slats_paper]: https://www.researchgate.net/publication/370024945_Unsupervised_Domain_Transfer_for_Science_Exploring_Deep_Learning_Methods_for_Translation_between_LArTPC_Detector_Simulations_with_Differing_Response_Models
 [uvcgan_paper]: https://openaccess.thecvf.com/content/WACV2023/html/Torbunov_UVCGAN_UNet_Vision_Transformer_Cycle-Consistent_GAN_for_Unpaired_Image-to-Image_Translation_WACV_2023_paper.html
 [uvcgan_repo]: https://github.com/LS4GAN/uvcgan
 [uvcgan2_paper]: https://arxiv.org/abs/2303.16280
 [uvcgan2_repo]: https://github.com/LS4GAN/uvcgan2
+
+[dataset_location]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L64 
+[domain_names]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L69
+[label]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L111
+[outdir]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L112
