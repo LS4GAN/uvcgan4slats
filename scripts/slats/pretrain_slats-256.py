@@ -59,14 +59,14 @@ args_dict = {
         'datasets' : [
             {
                 'dataset' : {
-                    'name'   : 'toyzero-precropped-v1',
+                    'name'   : 'ndarray-domain-hierarchy',
                     'domain' : domain,
                     'path'   : 'slats/slats_tiles/',
                 },
                 'shape'           : (1, 256, 256),
                 'transform_train' : None,
                 'transform_test'  : None,
-            } for domain in [ 'a', 'b' ]
+            } for domain in [ 'fake', 'real' ]
         ],
         'merge_type' : 'unpaired',
     },
