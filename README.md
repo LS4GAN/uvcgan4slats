@@ -123,7 +123,7 @@ PATH/TO/YOUR/DATASET
 
 ## 1. Pretraining (optional but recommended)
 - **configuration file**: [./scripts/slats/pretrain_slats-256.py](./scripts/slats/pretrain_slats-256.py) 
-- **command**: `python ./script/pretrain_slats-256.py`
+- **command**: `python ./script/slats/pretrain_slats-256.py`
 - **hyper-parameters**: generator type (`--gen`) and batch size (`--batch_size`) can be configured using command line flags. 
 All other parameters (e.g. generator/discriminator, optimizer, scheduler, masking, etc) can be modified directly in python script. 
 
@@ -131,7 +131,7 @@ All other parameters (e.g. generator/discriminator, optimizer, scheduler, maskin
 - **configuration file**: 
   - with pretrained generators: [./scripts/slats/train_slats-256.py](./scripts/slats/train_slats-256.py) 
   - from scratch:  one can simply use the same script but remove the `transfer` from `args_dict` or set it to `None`. 
-- **command**: `python ./script/train_slats-256.py`
+- **command**: `python ./script/slats/train_slats-256.py`
 - **Hyper-parameters that can potentially make a difference**: 
   1. **cycle-consistency loss coefficient**: in section 3.1 of the [uvcgan paper][uvcgan_paper], we have `--lambda-cycle` $=\lambda_{\textrm{cyc}}$ 
   1. **learning rates**: `--lr-gen` and `--lr-disc`
