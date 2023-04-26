@@ -134,7 +134,7 @@ All other parameters (e.g. generator/discriminator, optimizer, scheduler, maskin
 ## 2. Training:
 - **configuration file**: 
   - with pretrained generators: [./scripts/slats/train_slats-256.py](./scripts/slats/train_slats-256.py) 
-  - from scratch:  one can simply use the same script but remove the `transfer` from `args_dict` or set it to `None`. 
+  - from scratch:  one can simply use the same script but remove the field `transfer` in `args_dict` or set its value to `None`. 
 - **command**: `python ./script/slats/train_slats-256.py`
 - **Hyper-parameters that can potentially make a difference**: 
   1. **cycle-consistency loss coefficient**: in section 3.1 of the [uvcgan paper][uvcgan_paper], we have `--lambda-cycle` $=\lambda_{\textrm{cyc}}$ 
