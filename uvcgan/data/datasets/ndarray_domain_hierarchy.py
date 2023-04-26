@@ -52,4 +52,3 @@ class NDArrayDomainHierarchy(Dataset):
             result = self._transform(result)
 
         return result
-
