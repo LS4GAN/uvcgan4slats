@@ -95,7 +95,7 @@ Denote the result folder by `RESULT`, then we can run the following command to g
 ```
 python ./scripts/plot_comparisons.py RESULT/fake_b RESULT/real_b -n 20 --log --symmetric
 ```
-We use `--log` here to plot in log scale and use `--symmetric` to indicate that the image values are symmetric around zero. (We need those two parameters for SLATS images, but it may not be case for other grayscaled images.) Here are three samples produced by `./scripts/plot_comparisons.py` comparing the UVCGAN translation (on left) to the target (on right).
+We use `--log` here to plot in log scale and use `--symmetric` to indicate that the image values are symmetric around zero. (We need those two parameters for SLATS images, but it may not be case for other grayscale images.) Here are three samples produced by `./scripts/plot_comparisons.py` comparing the UVCGAN translation (on left) to the target (on right).
 <p align="center">
   <img src="https://github.com/LS4GAN/gallery/blob/main/uvcgan4slats/img_comparison/sample_62.png" width="30%" title="translation_vs_target_sample_62">
   <img src="https://github.com/LS4GAN/gallery/blob/main/uvcgan4slats/img_comparison/sample_34.png" width="30%" title="translation_vs_target_sample_34">
@@ -103,7 +103,8 @@ We use `--log` here to plot in log scale and use `--symmetric` to indicate that 
 </p>
 
 # Train your own model
-In this part, we demonstrate how to train your UVCGAN model on your own data. We will use training on SLATS as an example. 
+In this part, we demonstrate how to train UVCGAN model on your own data. 
+We will use training on SLATS as an example. 
 ## 0. Dataset
 Organized your dataset as follows:
 ```bash
