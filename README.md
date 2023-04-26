@@ -119,9 +119,11 @@ PATH/TO/YOUR/DATASET
 where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and `DOMAIN_A` and `DOMAIN_B` are the [domain names][domain_names].
 - If you want to train UVCGAN on RGB images, consider using [UVCGAN][uvcgan_repo] or [UVCGAN2][uvcgan2_repo].
 - If you have a grayscale numpy (`.npz`) dataset :
-  - _no transform needed_: you may start with reusing the scripts for SLATS with only change to [dataset location][dataset_location], [domain names][domain_names], [label][label], and [outdir][outdir].
-  - _transform needed_:
-- Write your own dataset API:
+  - _no transform needed_: 
+    One may start with reusing the scripts for SLATS with only change to [dataset location][dataset_location], [domain names][domain_names], [label][label], and [outdir][outdir]. 
+    For a standalone example of data loading without transform, see [`./scripts/dataloading/dataloading.py`](./scripts/dataloading/dataloading.py) for detail.
+  - _transform needed_: For a standalone example of data loading with transform, see [`./scripts/dataloading/dataloading_transform.py`](./scripts/dataloading/dataloading_transform.py) for detail. The dataset we used in this script is adapted from the [BRaTS 2021 Task 1 Dataset][MRI_dataset].
+- Write your own dataset API: In case you need to write your own dataset API, save the script in [`./uvcgan/data/datasets`](./uvcgan/data/datasets) and update the `select_dataset` function in [`./uvcgan/data/data.py`](./uvcgan/data/data.py) with your own dataset API.
 
 
 
@@ -156,3 +158,4 @@ All other parameters (e.g. generator/discriminator, optimizer, scheduler, maskin
 [domain_names]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L69
 [label]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L111
 [outdir]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L112
+[MRI_dataset]: https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1
