@@ -15,14 +15,14 @@ This comes in handy when you need to make sure that the translator can work unam
 Please do not hesitate to contact us if you need help applying UVCGAN to your scientific endeavor.
 
 ## :tada::tada:Anoucements:tada::tada:
-We published a upgraded version of `UVCGAN`, called `UVCGANv2` ([paper][uvcgan2_paper], [repo][uvcgan2_repo]), that works even greater on photographic datasets (like CelebA-HQ and AFHQ). Feel free to check it out!
+We published an upgraded version of `UVCGAN`, called `UVCGANv2` ([paper][uvcgan2_paper], [repo][uvcgan2_repo]), that works even greater on photographic datasets (like CelebA-HQ and AFHQ). Feel free to check it out!
 
 
 # Installation & Requirements
 
 ## Requirements
 
-`uvcgan4slats` models were trained under the official `pytorch` container `pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime`. 
+`uvcgan4slats` models were trained under the official `PyTorch` container `pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime`. 
 A similar training environment can be created by running the following command from the `uvcgan4slats` source folder.
 ```
 conda env create -f contrib/conda_env.yaml
