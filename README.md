@@ -105,12 +105,7 @@ We use `--log` here to plot in log scale and use `--symmetric` to indicate that 
 # Train your own model
 In this part, we demonstrate how to train your UVCGAN model on your own data. We will use training on SLATS as an example. 
 ## 0. Dataset
-- If you want to train UVCGAN on RGB images, consider using [UVCGAN][uvcgan_repo] or [UVCGAN2][uvcgan2_repo].
-- If you have a grayscale numpy (`.npz`) dataset :
-  - if no input/output transform are needed: you may start with reusing the scripts for SLATS with only change to [dataset location][dataset_location], [domain names][domain_names], [label][label], and [outdir][outdir].
-  - if input/output transform are needed:
-
-In any case, your data should be organized as follows:
+Organized your dataset as follows:
 ```bash
 PATH/TO/YOUR/DATASET
 ├── train
@@ -121,12 +116,19 @@ PATH/TO/YOUR/DATASET
     └── DOMAIN_B
 ```
 where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and `DOMAIN_A` and `DOMAIN_B` are the [domain names][domain_names].
+- If you want to train UVCGAN on RGB images, consider using [UVCGAN][uvcgan_repo] or [UVCGAN2][uvcgan2_repo].
+- If you have a grayscale numpy (`.npz`) dataset :
+  - _no transform needed_: you may start with reusing the scripts for SLATS with only change to [dataset location][dataset_location], [domain names][domain_names], [label][label], and [outdir][outdir].
+  - _transform needed_:
+- Write your own dataset API:
+
+
 
 ## 1. Pretraining (optional but recommended)
 - **configuration file**: [./scripts/slats/pretrain_slats-256.py](./scripts/slats/pretrain_slats-256.py) 
 - **command**: `python ./script/slats/pretrain_slats-256.py`
 - **hyper-parameters**: generator type (`--gen`) and batch size (`--batch_size`) can be configured using command line flags. 
-All other parameters (e.g. generator/discriminator, optimizer, scheduler, masking, etc) can be modified directly in configuration file. 
+All other parameters (e.g. generator/discriminator, optimizer, scheduler, masking, etc) can be modified directly in the configuration file.
 
 ## 2. Training:
 - **configuration file**: 
