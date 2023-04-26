@@ -85,10 +85,11 @@ If the pretrained models are downloaded using `./scripts/download_slats_models.s
 The results are saved to `PATH_TO_PRETRAINED_MODELS/evals/final/ndarrays_eval-test`.
 There are 6 subfolders: 
 - `fake_a` and `fake_b`: translated images. 
-  More precisely, let `G_{a->b}` be the translator from domain `a` to domain `b` and let let `x_a` be an image from domain `a`, then `G_{a->b}(x_a)` will be found in `fake_b`.
+  More precisely, let $G_{a \rightarrow b}$ be the translator from domain $a$ to domain $b$ and let let $x$ be an image from domain $a$, then $G_{a \rightarrow b}(x)$ will be found in `fake_b`.
 - `real_a` and `real_b`: true images from their respective domain
 - `reco_a` and `reco_b`: cyclically reconstructed images. 
-  More precisely, let `G_{a->b}` be the translator from domain `a` to domain `b`, and `G_{a->b}`, `b` to `a`. Let `x_a` be an image from domain `a`, then `G_{b->a}G_{a->b}(x_a)` will be found in `reco_a`. 
+  More precisely, let $G_{a \rightarrow b}$ be the translator from domain $a$ to domain $b$ and $G_{a \rightarrow b}$ be the translator from domain $b$ to domain $a$. 
+  Let $x$ be an image from domain $a$, then $G_{b \rightarrow a}G_{a \rightarrow b}(x)$ will be found in `reco_a`. 
 
 We can use `./scripts/plot_comparisons.py` to compare pairs of images.
 Denote the result folder by `RESULT`, then we can run the following command to generate 20 plots comparing translations to the targets.
