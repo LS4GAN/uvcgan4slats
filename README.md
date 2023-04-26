@@ -41,7 +41,7 @@ python setup.py develop --user
 
 ## Dependencies:
 
-The working of uvcgan4slats dependes on the `toytools` package. 
+The working of `uvcgan4slats` dependes on the `toytools` package. 
 Download and install the package by running the following commands (in the `uvcgan` conda environment)
 ```
 git clone https://github.com/LS4GAN/toytools
