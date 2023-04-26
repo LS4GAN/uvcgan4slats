@@ -117,13 +117,13 @@ PATH/TO/YOUR/DATASET
     └── DOMAIN_B
 ```
 where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and `DOMAIN_A` and `DOMAIN_B` are the [domain names][domain_names].
-- If you want to train UVCGAN on RGB images, consider using [UVCGAN][uvcgan_repo] or [UVCGAN2][uvcgan2_repo].
-- If you have a grayscale numpy (`.npz`) dataset :
+- **RGB images**: please consider using [UVCGAN][uvcgan_repo] or [UVCGAN2][uvcgan2_repo].
+- **grayscale numpy (`.npz`) dataset**:
   - _no transform needed_: 
-    One may start with reusing the scripts for SLATS with only change to [dataset location][dataset_location], [domain names][domain_names], [label][label], and [outdir][outdir]. 
+    One may start with reusing the scripts for SLATS with only changes to [dataset location][dataset_location], [domain names][domain_names], [label][label], and [outdir][outdir]. 
     For a standalone example of data loading without transform, see [`./scripts/dataloading/dataloading.py`](./scripts/dataloading/dataloading.py) for detail.
   - _transform needed_: For a standalone example of data loading with transform, see [`./scripts/dataloading/dataloading_transform.py`](./scripts/dataloading/dataloading_transform.py) for detail. The dataset we used in this script is adapted from the [BRaTS 2021 Task 1 Dataset][MRI_dataset].
-- Write your own dataset API: In case you need to write your own dataset API, save the script in [`./uvcgan/data/datasets`](./uvcgan/data/datasets) and update the `select_dataset` function in [`./uvcgan/data/data.py`](./uvcgan/data/data.py) with your own dataset API.
+- **custom dataset API**: In case you need to write your own dataset API, save the script in [`./uvcgan/data/datasets`](./uvcgan/data/datasets) and update the `select_dataset` function in [`./uvcgan/data/data.py`](./uvcgan/data/data.py) with your own dataset API.
 
 
 
