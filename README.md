@@ -86,10 +86,9 @@ The results are saved to `PATH_TO_PRETRAINED_MODELS/evals/final/ndarrays_eval-te
 There are 6 subfolders: 
 - `fake_a` and `fake_b`: translated images. 
   More precisely, let $G_{a \rightarrow b}$ be the translator from domain $a$ to domain $b$ and let let $x$ be an image from domain $a$, then $G_{a \rightarrow b}(x)$ will be found in `fake_b`.
-- `real_a` and `real_b`: true images from their respective domain
+- `real_a` and `real_b`: true images from their respective domains.
 - `reco_a` and `reco_b`: cyclically reconstructed images. 
-  More precisely, let $G_{a \rightarrow b}$ be the translator from domain $a$ to domain $b$ and $G_{a \rightarrow b}$ be the translator from domain $b$ to domain $a$. 
-  Let $x$ be an image from domain $a$, then $G_{b \rightarrow a}G_{a \rightarrow b}(x)$ will be found in `reco_a`. 
+  More precisely, let $G_{a \rightarrow b}$ be the translator from domain $b$ to domain $a$, and let $x$ be an image from domain $a$, then $G_{b \rightarrow a}G_{a \rightarrow b}(x)$ will be found in `reco_a`. 
 
 We can use `./scripts/plot_comparisons.py` to compare pairs of images.
 Denote the result folder by `RESULT`, then we can run the following command to generate 20 plots comparing translations to the targets.
