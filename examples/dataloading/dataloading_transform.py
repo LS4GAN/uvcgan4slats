@@ -24,7 +24,7 @@ def main():
     Loading an MRI dataset with transform
     """
 
-    side = 256
+    side = 368
 
     args_dict = {
         'data': {
@@ -33,12 +33,12 @@ def main():
                     'dataset' : {
                         'name'   : 'ndarray-domain-hierarchy',
                         'domain' : domain,
-                        'path'   : f'Francesco_MRI/mri_{side}',
+                        'path'   : f'mri_{side}',
                     },
                     'shape'           : (1, side, side),
                     'transform_train' : custom_transform,
                     'transform_test'  : custom_transform,
-                } for domain in [ 'mri', 'mri_contrast' ]
+                } for domain in [ 'a', 'b' ]
             ],
             'merge_type' : 'unpaired'
         },
