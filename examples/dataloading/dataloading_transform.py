@@ -1,5 +1,7 @@
 """
-An example of data loading with an MRI dataset
+This is an example of loading data that need transform.
+It will load an MRI dataset adapted from BRaTS 2021 Task 1 dataset.
+
 To run it, please do the following.
 In the folder containing this script,
 0. activate conda environment `uvcgan4slats` by running

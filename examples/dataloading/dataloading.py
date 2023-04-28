@@ -1,9 +1,19 @@
 """
-An example of data loading with an excerpt from the SLATS dataset
-To run it, please do the following.
-In the folder containing the script,
-1. set environment variable of UVCGAN_DATA to ./data by running
-    `export UVCGAN_DATA=./data`
+This is an example of loading data that does not need transform.
+It will load an excerpt from the `SLATS` dataset.
+For more discussion on the `SLATS` dataset, see the README
+of the repository or the paper: https://arxiv.org/abs/2304.12858.
+
+To run it, please do the folowing.
+In the folder containing this script,
+0. activate conda environment `uvcgan4slats` by running
+  ```
+  conda activate uvcgan4slats
+  ```
+1. set environment variable of `UVCGAN_DATA` to ./data by running
+  ```
+  export UVCGAN_DATA=./data
+  ```
 2. run `python dataloading.py`
 """
 
