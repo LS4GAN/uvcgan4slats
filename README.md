@@ -12,10 +12,9 @@ However, by loading the data in an unpaired fashion, we can use it to train an u
 The pairedness of the dataset enables us to evaluate the performance of a neural translator by comparing a translation directly to its designated target.
 This comes in handy when you need to make sure that the translator can work unambiguously, like for scientific experiments. 
 
-Please do not hesitate to contact us if you need help applying UVCGAN to your scientific endeavor.
-
 In this readme file, we will describe how to [apply UVCGAN to SLATS](#run-inference-with-pretrained-translators)
 We will also give a tutorial on how to [apply UVCGAN to generic datasets](#train-your-own-model).
+However, if you encounter any difficulty in applying UVCGAN to you work, please do not hesitate to contact us.
 
 ## :tada::tada:Anoucements:tada::tada:
 We published an upgraded version of `UVCGAN`, called `UVCGANv2` ([paper][uvcgan2_paper], [repo][uvcgan2_repo]), that works even greater on photographic datasets (like CelebA-HQ and AFHQ). Feel free to check it out!
