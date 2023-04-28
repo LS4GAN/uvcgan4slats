@@ -1,9 +1,15 @@
 """
-An example of data loading with an MRI SLATS dataset
+An example of data loading with an MRI dataset
 To run it, please do the following.
-In the folder containing the script,
-1. set environment variable of UVCGAN_DATA to ./data by running
-    `export UVCGAN_DATA=./data`
+In the folder containing this script,
+0. activate conda environment `uvcgan4slats` by running
+  ```
+  conda activate uvcgan4slats
+  ```
+1. set environment variable of `UVCGAN_DATA` to ./data by running
+  ```
+  export UVCGAN_DATA=./data
+  ```
 2. run `python dataloading_transform.py`
 """
 
