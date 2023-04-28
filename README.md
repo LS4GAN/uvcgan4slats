@@ -22,31 +22,32 @@ However, if you encounter any difficulty in applying UVCGAN to you work, please 
 We published an upgraded version of `UVCGAN`, called `UVCGANv2` ([paper][uvcgan2_paper], [repo][uvcgan2_repo]), that works even greater on photographic datasets (like CelebA-HQ and AFHQ). Feel free to check it out!
 
 
-# Installation & Requirements
+# Installation and requirements
 
 ## Requirements
 
-`uvcgan4slats` models were trained under the official `PyTorch` container `pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime`.
-A similar training environment can be created by running the following command from the `uvcgan4slats` source folder.
+`uvcgan4slats` models were trained under the official `PyTorch` container 
+`pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime`. A similar training environment 
+can be created by running the following command from the `uvcgan4slats` source folder.
 ```
 conda env create -f contrib/conda_env.yml
 ```
-Later on, the enviroment can be activated by running
+Later on, the environment can be activated by running
 ```
 conda activate uvcgan4slats
 ```
 
 ## Installation
 
-To install the `uvcgan4slats` package, simply run the following command from the `uvcgan4slats` source folder.
+To install the `uvcgan4slats` package, run the following command from the 
+`uvcgan4slats` source folder.
 ```
 python setup.py develop --user
 ```
 
-## Dependencies:
+## Dependencies
 
-The working of `uvcgan4slats` dependes on the `toytools` package.
-Download and install the package by running the following commands (in the `uvcgan` conda environment)
+The working of `uvcgan4slats` dependes on the `toytools` package. Download and install the package by running the following commands (in the `uvcgan4slats` conda environment)
 ```
 git clone https://github.com/LS4GAN/toytools
 cd toytools
@@ -55,52 +56,73 @@ python setup.py develop --user
 
 ## Environment Setup
 
-`uvcgan4slats` uses extensively two environment variables, `UVCGAN_DATA` and `UVCGAN_OUTDIR`, to locate dataset and save output.
-Users are advised to set these environment variables.
-`uvcgan4slats` will look for datasets in the `${UVCGAN_DATA}` directory and will save results under the `${UVCGAN_OUTDIR}` directory.
-If these variables are not set, they will default to `./data` and `./outdir`, respectively.
-To set up the environment variables, run the following commands
+`uvcgan4slats` uses extensively two environment variables: `UVCGAN_DATA` to 
+locate dataset and `UVCGAN_OUTDIR` to save output. Users are advised to set 
+these environment variables. `uvcgan4slats` will look for datasets in the 
+`${UVCGAN_DATA}` directory and will save results under the `${UVCGAN_OUTDIR}` 
+directory. If these variables are not set, they will default to `./data` and 
+`./outdir`, respectively. To set up the environment variables, run the following 
+commands
 ```
 export UVCGAN_DATA=PATH_TO_DATASET
 export UVCGAN_OUTDIR=PATH_TO_OUTDIR
 ```
 
-# Download SLATS and pre-trained models
-One can download the [datasets](https://zenodo.org/record/7809108) and pretrained [models](https://zenodo.org/deposit/7809460)
-directly from the Zenodo website, or use the downloading scripts.
+# Download `SLATS` and pre-trained models
+The [datasets](https://zenodo.org/record/7809108) and pretrained 
+[models](https://zenodo.org/deposit/7809460) can be downloaded directly from the 
+Zenodo website, or use the downloading scripts:
 - **Datasets**:
-  - `./scripts/download_slats_datasets.sh tiles` for SLATS tiles (256 x 256 images)
-  - `./scripts/download_slats_datasets.sh center_crops` for SLATS center crops (768 x 5888 images)
+  - for SLATS tiles (256 x 256 images), run   
+  ```
+  ./scripts/download_slats_datasets.sh tiles` 
+  ```
+  - for `SLATS` center crops (768 x 5888 images), run
+  ```
+  ./scripts/download_slats_datasets.sh center_crops
+  ``` 
+  The datasets will be saved at 
+  `${UVCGAN_DATA}/slats/slats_[tiles,center_crops]` or 
+  `./data/slats/slats_[tiles,center_crops]` if `UVCGAN_DATA` is unset.
 
-  The dataset will be saved at `${UVCGAN_DATA}/slats/slats_[tiles,center_crops]` or `./data/slats/slats_[tiles,center_crops]` if `UVCGAN_DATA` is unset.
+  Note that the `SLATS` center crops are not used for training `UVCGAN`. We   
+  provide the dataset so you can try developing more efficient and powerful 
+  networks for much larger images :wink:
+- **models**:
+  To download trained models on `SLATS`, run
+  ```
+  ./scripts/download_slats_models.sh`
+  ```
+  The files will be saved at `${UVCGAN_OUTDIR}/slats/pretrained` or 
+  `./outdir/slats/pretrained` if `UVCGAN_OUTDIR` is unset.
 
-  Note that the SLATS center crops are not used for training UVCGAN.
-  We provide the dataset so you can try developing more efficient and powerful networks for much larger images :wink:
-- **Pre-trained Models**: `./scripts/download_slats_models.sh`
-  The downloaded files will be saved at `${UVCGAN_OUTDIR}/slats/pretrained` or `./outdir/slats/pretrained` if `UVCGAN_OUTDIR` is unset.
-
-# Run inference with pretrained translators
-To run inference with pretrained translators, run the following command in the `uvcgan4slats` source folder
+# Run inference with pre-trained translators
+To run inference with pre-trained translators, run the following command in the 
+`uvcgan4slats` source folder
 ```
 python scripts/translate_data.py PATH_TO_PRETRAINED_MODELS
 ```
-If the pretrained models are downloaded using
-`./scripts/download_slats_models.sh`, `PATH_TO_PRETRAINED_MODELS` here is either
+If the pretrained models are downloaded using downloading script, 
+`PATH_TO_PRETRAINED_MODELS` here is either
 `${UVCGAN_OUTDIR}/slats/pretrained` or `./outdir/slats/pretrained` if
 `UVCGAN_OUTDIR` is unset.
 
 The results are saved to
-`PATH_TO_PRETRAINED_MODELS/evals/final/ndarrays_eval-test`.
-There are 6 subfolders:
-- `fake_a` and `fake_b`: translated images.
-  More precisely, let $G_{a \rightarrow b}$ be the translator from domain $a$ to domain $b$ and let let $x$ be an image from domain $a$, then $G_{a \rightarrow b}(x)$ will be found in `fake_b`.
+`PATH_TO_PRETRAINED_MODELS/evals/final/ndarrays_eval-test`. There are six 
+subfolders:
+- `fake_a` and `fake_b`: translated images. 
+  More precisely, let $G_{a \rightarrow b}$ be the translator from domain $a$ to 
+  domain $b$ and let let $x$ be an image from domain $a$, then $G_{a \rightarrow 
+  b}(x)$ will be found in `fake_b`.
 - `real_a` and `real_b`: true images from their respective domains.
 - `reco_a` and `reco_b`: cyclically reconstructed images.
-  More precisely, let $G_{a \rightarrow b}$ be the translator from domain $b$ to domain $a$, and let $x$ be an image from domain $a$, then $G_{b \rightarrow a}G_{a \rightarrow b}(x)$ will be found in `reco_a`.
+  More precisely, let $G_{a \rightarrow b}$ be the translator from domain $b$ to 
+  domain $a$, and let $x$ be an image from domain $a$, then $G_{b \rightarrow 
+  a}G_{a \rightarrow b}(x)$ will be found in `reco_a`.
 
 We can use `./scripts/plot_comparisons.py` to compare pairs of images. Denote
 the result folder by `RESULT`, then we can run the following command to generate
-20 plots comparing translations to the targets. The resulting image will be
+20 plots comparing translations to the targets. The resulting plots will be
 saved to the folder `./comp_images`.
 ```
 python ./scripts/plot_comparisons.py RESULT/fake_b RESULT/real_b \
