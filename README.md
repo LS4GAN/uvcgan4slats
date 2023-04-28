@@ -147,13 +147,12 @@ where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and
   to `NumPy` arrays.
 ### 0.2 **`NumPy` arrays (saved with extension `.npz`)**:
   - _no transform needed_:
-    You may start with reusing the scripts for `SLATS` with only changes to
-    [dataset location][dataset_location], [domain names][domain_names],
-    [label][label], and [outdir][outdir]. For a standalone example of data
-    loading without transform, see [`dataloading.py`][dataloading].
+    For a standalone example of data loading without transform, see 
+    [`dataloading.py`][dataloading]. The dataset used in this script is an 
+    excerpt from the `SLATS` dataset.
   - _transform needed_:
     For a standalone example of data loading with transform, see
-    [`dataloading_transform.py`][dataloading_transform]. The dataset we used in 
+    [`dataloading_transform.py`][dataloading_transform]. The dataset used in 
     this script is adapted from the [BRaTS 2021 Task 1 dataset][MRI_dataset].
 ### 0.3 **Customized dataset API**:
   In case you need to use your own dataset API, please save the script to
@@ -162,11 +161,29 @@ where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and
   with your own dataset API.
 
 ## 1. Pretraining (optional but recommended)
-Unpaired image-to-image translation presents a significant challenge. As such, it may be advantageous to start the training with prepared networks, rather than randomly initialized ones. And the advantange of pre-training is confirmed by multiple works (see section 5.3 of the [UVCGAN paper][uvcgan_paper] for more information). There are a number of ways for pre-training. Here for `SLATS`, we use the BERT-like pretraining approach. We subdivide each image into a grid of 32 x 32 blocks and randomly replace the all values in 40% of the blocks with zero. Then, we train a generator to fill in the blanks on the two domains jointly. This generator is then used to initialize both generators for the translation training. For more detail of pre-training on `SLATS`, see section 3.3.1 of the [UVCGAN-for-SLATS paper][uvcgan4slats_paper]. 
-- **configuration file**: [./scripts/slats/pretrain_slats-256.py](./scripts/slats/pretrain_slats-256.py)
-- **command**: `python ./script/slats/pretrain_slats-256.py`
-- **hyper-parameters**: generator type (`--gen`) and batch size (`--batch_size`) can be configured using command line flags.
-All other parameters (e.g. generator/discriminator, optimizer, scheduler, masking, etc) can be modified directly in the configuration file.
+Unpaired image-to-image translation presents a significant challenge. As such, 
+it may be advantageous to start the training with prepared networks, rather than 
+randomly initialized ones. And the advantange of pre-training is confirmed by 
+multiple works (see section 5.3 of the [`UVCGAN` paper][uvcgan_paper] for more 
+information). There are a number of ways for pre-training. Here for `SLATS`, we 
+use the BERT-like pretraining approach. We subdivide each image into a grid of 
+32 x 32 blocks and randomly replace the all values in 40% of the blocks with 
+zero. Then, we train a generator to fill in the blanks on the two domains 
+jointly. This generator is then used to initialize both generators for the 
+translation training. For more detail of pre-training on `SLATS`, see section 
+3.3.1 of the [`UVCGAN-for-SLATS` paper][uvcgan4slats_paper]. 
+- **configuration file**: 
+  You may start with the scripts, 
+  [`pretrain_slats-256.py`](./scripts/slats/pretrain_slats-256.py), for `SLATS` 
+  with only changes to [dataset location][dataset_location], 
+  [domain names][domain_names], [label][label], and [outdir][outdir].
+- **command**: 
+  `python ./script/slats/pretrain_slats-256.py`
+- **hyper-parameters**: 
+  generator type (`--gen`) and batch size (`--batch_size`) can be configured
+  using command line flags. All other parameters (e.g. generator/discriminator,
+  optimizer, scheduler, masking, etc) can be modified directly in the
+  configuration file.
 
 ## 2. Training:
 - **configuration file**:
