@@ -15,6 +15,7 @@ This comes in handy when you need to make sure that the translator can work unam
 In this readme file, 
 - we will describe how to [apply UVCGAN to SLATS](#run-inference-with-pretrained-translators)
 - we will also give a tutorial on how to [apply UVCGAN to generic datasets](#train-your-own-model).
+
 However, if you encounter any difficulty in applying UVCGAN to you work, please do not hesitate to contact us.
 
 ## :tada::tada:Anoucements:tada::tada:
@@ -95,8 +96,9 @@ There are 6 subfolders:
 
 We can use `./scripts/plot_comparisons.py` to compare pairs of images.
 Denote the result folder by `RESULT`, then we can run the following command to generate 20 plots comparing translations to the targets.
+The resulting image will be saved to the folder `./comp_images`.
 ```
-python ./scripts/plot_comparisons.py RESULT/fake_b RESULT/real_b -n 20 --log --symmetric
+python ./scripts/plot_comparisons.py RESULT]/fake_b RESULT/real_b ./comp_images -n 20 --log --symmetric
 ```
 We use `--log` here to plot in log scale and use `--symmetric` to indicate that the image values are symmetric around zero. (We need those two parameters for SLATS images, but it may not be case for other grayscale images.) Here are three samples produced by `./scripts/plot_comparisons.py` comparing the UVCGAN translation (on left) to the target (on right).
 <p align="center">
