@@ -1,13 +1,35 @@
 # Unpaired Image-to-Image Translation of the `SLATS` dataset with `UVCGAN`
 
-This repo documents the application of the UNet Vision Transformer cycle-consistent GAN, or `UVCGAN` ([Paper][uvcgan_paper], [repo][uvcgan_repo]), to the scientific dataset `SLATS` from neutrino experiment simulation. More detail about the project can be found in the [`UVCGAN4SLATS` paper][uvcgan4slats_paper]: _Unsupervised Domain Transfer for Science: Exploring Deep Learning Methods for Translation between LArTPC Detector Simulations with Differing Response Models_.
+This repo documents the application of the UNet Vision Transformer cycle-
+consistent GAN, or `UVCGAN` ([Paper][uvcgan_paper], [repo][uvcgan_repo]), to the 
+scientific dataset `SLATS` from neutrino experiment simulation. More detail 
+about the project can be found in the 
+[`UVCGAN4SLATS` paper][uvcgan4slats_paper]: _Unsupervised Domain Transfer for 
+Science: Exploring Deep Learning Methods for Translation between LArTPC Detector 
+Simulations with Differing Response Models_.
 
-In this readme file, we will describe how to [apply `UVCGAN` to the `SLATS` dataset](#run-inference-with-pretrained-translators). We will also give a tutorial on how to [apply `UVCGAN` to generic datasets](#train-your-own-model). Please don't hesitate to contact us if you encounter any challenges when applying `UVCGAN` to your work.
+In this readme file, we will describe how to apply `UVCGAN` to the `SLATS` 
+dataset ([link](#run-inference-with-pretrained-translators)). We will also give 
+a tutorial on how to apply `UVCGAN` to generic datasets 
+([link](#train-your-own-model)). Please don't hesitate to contact us if you 
+encounter any challenges when applying `UVCGAN` to your work.
 
-The dataset, **Simple Liquid Argon Track Samples (`SLATS`)** was created from simulated neutrino experiments. It has two domains, each representing a specific detector response that simulates what would occur in a Liquid Argon Time-Projection Chamber (LArTPC). Unlike typical natural image datasets such as CelebA and AFHQ used for unpaired I2I translation algorithm training, `SLATS` is a paired dataset. Nevertheless, the data can be loaded in an unpaired manner to train an unpaired translation algorithm. The pairedness of the dataset facilitates the evaluation of a neural translator's performance by comparing a translation directly to its intended target. This is particularly useful in scientific experiments where unambiguous translator operation is crucial.
+The dataset, **Simple Liquid Argon Track Samples (`SLATS`)** was created from 
+simulated neutrino experiments. It has two domains, each representing a specific 
+detector response that simulates what would occur in a Liquid Argon Time-
+Projection Chamber (LArTPC). Unlike typical natural image datasets such as 
+CelebA and AFHQ used for unpaired I2I translation algorithm training, `SLATS` is 
+a paired dataset. Nevertheless, the data can be loaded in an unpaired manner to 
+train an unpaired translation algorithm. The pairedness of the dataset 
+facilitates the evaluation of a neural translator's performance by comparing a 
+translation directly to its intended target. This is particularly useful in 
+scientific experiments where unambiguous translator operation is crucial.
 
 ## :tada::tada:Anoucements:tada::tada:
-We have released a new and improved version of `UVCGAN` -- `UVCGANv2` -- that delivers outstanding results on photographic datasets (CelebA-HQ and AFHQ). You don't want to miss out on this upgrade, so go ahead and check it out! ([paper][uvcgan2_paper], [repo][uvcgan2_repo])
+We have released a new and improved version of `UVCGAN` -- `UVCGANv2` -- that 
+delivers outstanding results on photographic datasets (CelebA-HQ and AFHQ). You 
+don't want to miss out on this upgrade, so go ahead and check it out! 
+([paper][uvcgan2_paper], [repo][uvcgan2_repo])
 
 
 # Installation and requirements
