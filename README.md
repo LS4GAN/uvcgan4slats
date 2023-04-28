@@ -73,11 +73,11 @@ The [datasets](https://zenodo.org/record/7809108) and pretrained
 [models](https://zenodo.org/deposit/7809460) can be downloaded directly from the 
 Zenodo website, or use the downloading scripts:
 - **Datasets**:
-  - for SLATS tiles (256 x 256 images), run   
+  - `SLATS` tiles (256 x 256 images):  
   ```
   ./scripts/download_slats_datasets.sh tiles` 
   ```
-  - for `SLATS` center crops (768 x 5888 images), run
+  - `SLATS` center crops (768 x 5888 images):
   ```
   ./scripts/download_slats_datasets.sh center_crops
   ``` 
