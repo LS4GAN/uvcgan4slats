@@ -108,7 +108,7 @@ If the pretrained models are downloaded using downloading script,
 `UVCGAN_OUTDIR` is unset.
 
 The results are saved to
-`PATH_TO_PRETRAINED_MODELS/evals/final/ndarrays_eval-test`. There are six 
+`PATH_TO_PRETRAINED_MODELS/evals/final/ndarrays_eval-test`. In it are six 
 subfolders:
 - `fake_a` and `fake_b`: translated images. 
   More precisely, let $G_{a \rightarrow b}$ be the translator from domain $a$ to 
