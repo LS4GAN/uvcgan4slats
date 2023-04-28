@@ -9,12 +9,12 @@ Science: Exploring Deep Learning Methods for Translation between LArTPC
 Detector Simulations with Differing Response Models_.
 
 In this readme file, we will describe how to apply `UVCGAN` to the `SLATS`
-dataset ([link](#run-inference-with-pretrained-translators)). We will also
+dataset ([link](#run-inference-with-pre-trained-translators)). We will also
 give a tutorial on how to apply `UVCGAN` to generic datasets
 ([link](#train-your-own-model)). Please don't hesitate to contact us if you
 encounter any challenges when applying `UVCGAN` to your work.
 
-The dataset, **Simple Liquid Argon Track Samples (`SLATS`)** was created from
+The dataset, **Simple Liquid Argon Track Samples (`SLATS`)**, was created from
 simulated neutrino experiments. It has two domains, each representing a
 specific detector response that simulates what would occur in a Liquid Argon
 Time-Projection Chamber (LArTPC). Unlike typical natural image datasets such as
@@ -83,7 +83,7 @@ export UVCGAN_OUTDIR=PATH_TO_OUTDIR
 
 # Download `SLATS` and pre-trained models
 The [datasets](https://zenodo.org/record/7809108) and pretrained
-[models](https://zenodo.org/deposit/7809460) can be downloaded directly from
+[models](https://zenodo.org/record/7853835) can be downloaded directly from
 the Zenodo website, or use the downloading scripts:
 - **datasets**:
   - `SLATS` tiles (256 x 256 images):
@@ -253,7 +253,7 @@ Please consider tuning the following parameters for better result:
 
 
 <!---References and Citations -->
-[uvcgan4slats_paper]: https://www.researchgate.net/publication/370024945_Unsupervised_Domain_Transfer_for_Science_Exploring_Deep_Learning_Methods_for_Translation_between_LArTPC_Detector_Simulations_with_Differing_Response_Models
+[uvcgan4slats_paper]: https://arxiv.org/abs/2304.12858
 [uvcgan_paper]: https://openaccess.thecvf.com/content/WACV2023/html/Torbunov_UVCGAN_UNet_Vision_Transformer_Cycle-Consistent_GAN_for_Unpaired_Image-to-Image_Translation_WACV_2023_paper.html
 [uvcgan_repo]: https://github.com/LS4GAN/uvcgan
 [uvcgan2_paper]: https://arxiv.org/abs/2303.16280
