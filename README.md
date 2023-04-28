@@ -28,11 +28,11 @@ We published an upgraded version of `UVCGAN`, called `UVCGANv2` ([paper][uvcgan2
 `uvcgan4slats` models were trained under the official `PyTorch` container `pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime`. 
 A similar training environment can be created by running the following command from the `uvcgan4slats` source folder.
 ```
-conda env create -f contrib/conda_env.yaml
+conda env create -f contrib/conda_env.yml
 ```
 Later on, the enviroment can be activated by running
 ```
-conda activate uvcgan
+conda activate uvcgan4slats
 ```
 
 ## Installation
