@@ -14,6 +14,9 @@ This comes in handy when you need to make sure that the translator can work unam
 
 Please do not hesitate to contact us if you need help applying UVCGAN to your scientific endeavor.
 
+In this readme file, we will describe how to [apply UVCGAN to SLATS](#run-inference-with-pretrained-translators)
+We will also give a tutorial on how to [apply UVCGAN to generic datasets](#train-your-own-model).
+
 ## :tada::tada:Anoucements:tada::tada:
 We published an upgraded version of `UVCGAN`, called `UVCGANv2` ([paper][uvcgan2_paper], [repo][uvcgan2_repo]), that works even greater on photographic datasets (like CelebA-HQ and AFHQ). Feel free to check it out!
 
