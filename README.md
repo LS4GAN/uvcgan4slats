@@ -253,7 +253,7 @@ Please consider tuning the following parameters for better result:
 
 
 <!---References and Citations -->
-[uvcgan4slats_paper]: https://www.researchgate.net/publication/370024945_Unsupervised_Domain_Transfer_for_Science_Exploring_Deep_Learning_Methods_for_Translation_between_LArTPC_Detector_Simulations_with_Differing_Response_Models
+[uvcgan4slats_paper]: https://arxiv.org/abs/2304.12858
 [uvcgan_paper]: https://openaccess.thecvf.com/content/WACV2023/html/Torbunov_UVCGAN_UNet_Vision_Transformer_Cycle-Consistent_GAN_for_Unpaired_Image-to-Image_Translation_WACV_2023_paper.html
 [uvcgan_repo]: https://github.com/LS4GAN/uvcgan
 [uvcgan2_paper]: https://arxiv.org/abs/2303.16280
