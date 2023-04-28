@@ -72,7 +72,7 @@ export UVCGAN_OUTDIR=PATH_TO_OUTDIR
 The [datasets](https://zenodo.org/record/7809108) and pretrained 
 [models](https://zenodo.org/deposit/7809460) can be downloaded directly from the 
 Zenodo website, or use the downloading scripts:
-- **Datasets**:
+- **datasets**:
   - `SLATS` tiles (256 x 256 images):  
   ```
   ./scripts/download_slats_datasets.sh tiles
