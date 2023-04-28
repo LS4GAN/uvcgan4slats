@@ -75,7 +75,7 @@ Zenodo website, or use the downloading scripts:
 - **Datasets**:
   - `SLATS` tiles (256 x 256 images):  
   ```
-  ./scripts/download_slats_datasets.sh tiles` 
+  ./scripts/download_slats_datasets.sh tiles
   ```
   - `SLATS` center crops (768 x 5888 images):
   ```
