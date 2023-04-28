@@ -172,20 +172,22 @@ zero. Then, we train a generator to fill in the blanks on the two domains
 jointly. This generator is then used to initialize both generators for the 
 translation training. For more detail of pre-training on `SLATS`, see section 
 3.3.1 of the [`UVCGAN-for-SLATS` paper][uvcgan4slats_paper]. 
-- **configuration file**: 
-  You may start with the scripts, 
-  [`pretrain_slats-256.py`](./scripts/slats/pretrain_slats-256.py), for `SLATS` 
-  with only changes to [dataset location][dataset_location], 
-  [domain names][domain_names], [label][label], and [outdir][outdir].
-- **command**: 
-  `python ./script/slats/pretrain_slats-256.py`
-- **hyper-parameters**: 
-  generator type (`--gen`) and batch size (`--batch_size`) can be configured
-  using command line flags. All other parameters (e.g. generator/discriminator,
-  optimizer, scheduler, masking, etc) can be modified directly in the
-  configuration file.
+
+You may start with the scripts, 
+[`pretrain_slats-256.py`](./scripts/slats/pretrain_slats-256.py), for `SLATS` 
+with only changes to [dataset location][dataset_location], 
+[domain names][domain_names], [label][label], and [outdir][outdir]. Run the pre-
+training script as:
+```
+python ./script/slats/pretrain_slats-256.py
+```
+Generator type and batch size can be configured using command-line flags `--gen` 
+and `--batch_size`, respectively. All other parameters (e.g. 
+generator/discriminator, optimizer, scheduler, masking, etc.) can be modified 
+directly in the script.
 
 ## 2. Training:
+As for pre-training, you can start I2I translation training with 
 - **configuration file**:
   - with pretrained generators: [./scripts/slats/train_slats-256.py](./scripts/slats/train_slats-256.py)
   - from scratch:  one can simply use the same script but remove the field `transfer` in `args_dict` or set its value to `None`.
