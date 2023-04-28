@@ -152,7 +152,7 @@ where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and
     we used in this script is adapted from the 
     [BRaTS 2021 Task 1 dataset][MRI_dataset].
 ### 0.3 **Customized dataset API**: 
-  In case you need to write your own dataset API, please save the script in 
+  In case you need to write your own dataset API, please save the script to 
   [`./uvcgan/data/datasets`](./uvcgan/data/datasets) and update the 
   `select_dataset` function in [`./uvcgan/data/data.py`](./uvcgan/data/data.py) 
   with your own dataset API.
