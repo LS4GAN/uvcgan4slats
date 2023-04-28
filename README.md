@@ -187,18 +187,24 @@ generator/discriminator, optimizer, scheduler, masking, etc.) can be modified
 directly in the script.
 
 ## 2. Training:
-As for pre-training, you can start I2I translation training with 
-- **configuration file**:
-  - with pretrained generators: [./scripts/slats/train_slats-256.py](./scripts/slats/train_slats-256.py)
-  - from scratch:  one can simply use the same script but remove the field `transfer` in `args_dict` or set its value to `None`.
-- **command**: `python ./script/slats/train_slats-256.py`
-- **Hyper-parameters that can potentially make a difference**:
-  1. **cycle-consistency loss coefficient**: in section 3.1 of the [uvcgan paper][uvcgan_paper], we have `--lambda-cycle` $=\lambda_{\textrm{cyc}}$
-  1. **learning rates**: `--lr-gen` and `--lr-disc`
-  1. **discriminator gradient penalty**: in section 3.3 of the [uvcgan paper][uvcgan_paper], we have `--gp-constant` $=\gamma$ and `--gp-lambda` $=\lambda_{\textrm{GP}}$
+As for pre-training, you can simply start the I2I translation training with the script, [train_slats-256.py](./scripts/slats/train_slats-256.py), for `SLATS`  with only changes to [dataset location][dataset_location], 
+[domain names][domain_names], [label][label], [outdir][outdir], and where pretrained models can be located (the field [`transfer`][transfer] in the `args_dict`). However, if you choose to train from scratch without pre-trained generators, simply remove the field [`transfer`][transfer] in `args_dict` or set its value to `None`. Run the translation training as:
+```
+python ./script/slats/train_slats-256.py
+```
+### 2.1 Key hyper-parameters for optimal performance:
+Consider tuning the following parameters for better result:
+1. **cycle-consistency loss coefficient `--lambda-cycle`**: 
+  Equal to $\lambda_{\textrm{cyc}}$ in section 3.1 of the 
+  [`UVCGAN` paper][uvcgan_paper], and $\lambda_{a}$ and $\lambda_{b}$ in section 
+  3.3.2 of the [`UVCGAN`-for-`SLATS` paper][uvcgan4slats_paper].
+1. **learning rates** `--lr-gen` and `--lr-disc`
+1. **discriminator gradient penalty `--gp-constant` and `--gp-lambda`**: 
+  In section 3.3 of the [`UVCGAN` paper][uvcgan_paper] and section 3.3.2 of the 
+  [`UVCGAN`-for-`SLATS` paper][uvcgan4slats_paper], we have `--gp-constant` 
+  $=\gamma$ and `--gp-lambda` $=\lambda_{\textrm{GP}}$.
 
-  Consider tuning them for a better neural translator.
-
+  
 
 
 <!---References and Citations -->
@@ -211,6 +217,7 @@ As for pre-training, you can start I2I translation training with
 [domain_names]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L69
 [label]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L111
 [outdir]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L112
+[transfer]: https://github.com/pphuangyi/uvcgan4slats/blob/8593953347dbeab747319b5776c475750f88659a/scripts/slats/train_slats-256.py#L154
 [MRI_dataset]: https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1
 [image_ext]: https://pytorch.org/vision/main/_modules/torchvision/datasets/folder.html
 [dataloading]: ./examples/dataloading/dataloading.py
