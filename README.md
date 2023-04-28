@@ -84,9 +84,13 @@ To run inference with pretrained translators, run the following command in the `
 ```
 python scripts/translate_data.py PATH_TO_PRETRAINED_MODELS
 ```
-If the pretrained models are downloaded using `./scripts/download_slats_models.sh`, `PATH_TO_PRETRAINED_MODELS` here is either `${UVCGAN_OUTDIR}/slats/pretrained` or `./outdir/slats/pretrained` if `UVCGAN_OUTDIR` is unset.
+If the pretrained models are downloaded using
+`./scripts/download_slats_models.sh`, `PATH_TO_PRETRAINED_MODELS` here is either 
+`${UVCGAN_OUTDIR}/slats/pretrained` or `./outdir/slats/pretrained` if 
+`UVCGAN_OUTDIR` is unset.
 
-The results are saved to `PATH_TO_PRETRAINED_MODELS/evals/final/ndarrays_eval-test`.
+The results are saved to 
+`PATH_TO_PRETRAINED_MODELS/evals/final/ndarrays_eval-test`.
 There are 6 subfolders: 
 - `fake_a` and `fake_b`: translated images. 
   More precisely, let $G_{a \rightarrow b}$ be the translator from domain $a$ to domain $b$ and let let $x$ be an image from domain $a$, then $G_{a \rightarrow b}(x)$ will be found in `fake_b`.
@@ -94,13 +98,19 @@ There are 6 subfolders:
 - `reco_a` and `reco_b`: cyclically reconstructed images. 
   More precisely, let $G_{a \rightarrow b}$ be the translator from domain $b$ to domain $a$, and let $x$ be an image from domain $a$, then $G_{b \rightarrow a}G_{a \rightarrow b}(x)$ will be found in `reco_a`. 
 
-We can use `./scripts/plot_comparisons.py` to compare pairs of images.
-Denote the result folder by `RESULT`, then we can run the following command to generate 20 plots comparing translations to the targets.
-The resulting image will be saved to the folder `./comp_images`.
+We can use `./scripts/plot_comparisons.py` to compare pairs of images. Denote 
+the result folder by `RESULT`, then we can run the following command to generate 
+20 plots comparing translations to the targets. The resulting image will be 
+saved to the folder `./comp_images`.
 ```
-python ./scripts/plot_comparisons.py RESULT]/fake_b RESULT/real_b ./comp_images -n 20 --log --symmetric
+python ./scripts/plot_comparisons.py RESULT/fake_b RESULT/real_b \
+  ./comp_images -n 20 --log --symmetric
 ```
-We use `--log` here to plot in log scale and use `--symmetric` to indicate that the image values are symmetric around zero. (We need those two parameters for SLATS images, but it may not be case for other grayscale images.) Here are three samples produced by `./scripts/plot_comparisons.py` comparing the UVCGAN translation (on left) to the target (on right).
+We use `--log` here to plot in log scale and use `--symmetric` to indicate that
+the image values are symmetric around zero. We need those two parameters for 
+SLATS images, but it may not be case for other grayscale images. Here are three 
+samples produced by `./scripts/plot_comparisons.py` comparing the UVCGAN
+translation (on left) to the target (on right).
 <p align="center">
   <img src="https://github.com/LS4GAN/gallery/blob/main/uvcgan4slats/img_comparison/sample_62.png" width="30%" title="translation_vs_target_sample_62">
   <img src="https://github.com/LS4GAN/gallery/blob/main/uvcgan4slats/img_comparison/sample_34.png" width="30%" title="translation_vs_target_sample_34">
@@ -109,9 +119,10 @@ We use `--log` here to plot in log scale and use `--symmetric` to indicate that 
 
 # Train your own model
 In this part, we demonstrate how to train UVCGAN model on your own data. 
-We will use training on SLATS as an example. 
+We will use SLATS as an example. 
+
 ## 0. Dataset
-Organized your dataset as follows:
+Please organized your dataset as follows:
 ```bash
 PATH/TO/YOUR/DATASET
 ├── train
@@ -121,15 +132,30 @@ PATH/TO/YOUR/DATASET
     ├── DOMAIN_A
     └── DOMAIN_B
 ```
-where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and `DOMAIN_A` and `DOMAIN_B` are the [domain names][domain_names].
-- **RGB images**: please consider using [UVCGAN][uvcgan_repo] or [UVCGAN2][uvcgan2_repo].
-- **grayscale numpy (`.npz`) dataset**:
+where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and 
+`DOMAIN_A` and `DOMAIN_B` are the [domain names][domain_names].
+### 0.1 **Natural images**: 
+  If you images have extension `jepg`, `png`, `webp` [etc][image_ext]., please 
+  consider using [UVCGAN][uvcgan_repo] or [UVCGAN2][uvcgan2_repo] instead. 
+  However, if your images are in fact grayscale but saved as multi-channel (like 
+  RGB) images, you may also consider converting them to grayscale image and then
+  to `NumPy` arrays.
+### 0.2 **`NumPy` arrays (saved with extension `.npz`)**:
   - _no transform needed_: 
-    One may start with reusing the scripts for SLATS with only changes to [dataset location][dataset_location], [domain names][domain_names], [label][label], and [outdir][outdir]. 
-    For a standalone example of data loading without transform, see [`./scripts/dataloading/dataloading.py`](./scripts/dataloading/dataloading.py) for detail.
-  - _transform needed_: For a standalone example of data loading with transform, see [`./scripts/dataloading/dataloading_transform.py`](./scripts/dataloading/dataloading_transform.py) for detail. The dataset we used in this script is adapted from the [BRaTS 2021 Task 1 Dataset][MRI_dataset].
-- **custom dataset API**: In case you need to write your own dataset API, save the script in [`./uvcgan/data/datasets`](./uvcgan/data/datasets) and update the `select_dataset` function in [`./uvcgan/data/data.py`](./uvcgan/data/data.py) with your own dataset API.
-
+    You may start with reusing the scripts for `SLATS` with only changes to
+    [dataset location][dataset_location], [domain names][domain_names], 
+    [label][label], and [outdir][outdir]. For a standalone example of data
+    loading without transform, see [`dataloading.py`][dataloading] for detail.
+  - _transform needed_: 
+    For a standalone example of data loading with transform, see 
+    [`dataloading_transform.py`][dataloading_transform] for detail. The dataset 
+    we used in this script is adapted from the 
+    [BRaTS 2021 Task 1 dataset][MRI_dataset].
+### 0.3 **Customized dataset API**: 
+  In case you need to write your own dataset API, please save the script in 
+  [`./uvcgan/data/datasets`](./uvcgan/data/datasets) and update the 
+  `select_dataset` function in [`./uvcgan/data/data.py`](./uvcgan/data/data.py) 
+  with your own dataset API.
 
 
 ## 1. Pretraining (optional but recommended)
@@ -164,3 +190,6 @@ All other parameters (e.g. generator/discriminator, optimizer, scheduler, maskin
 [label]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L111
 [outdir]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L112
 [MRI_dataset]: https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1
+[image_ext]: https://pytorch.org/vision/main/_modules/torchvision/datasets/folder.html
+[dataloading]: ./scripts/dataloading/dataloading.py
+[dataloading_transform]: ./scripts/dataloading/dataloading_transform.py
