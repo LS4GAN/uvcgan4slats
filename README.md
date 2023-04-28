@@ -106,11 +106,11 @@ saved to the folder `./comp_images`.
 python ./scripts/plot_comparisons.py RESULT/fake_b RESULT/real_b \
   ./comp_images -n 20 --log --symmetric
 ```
-We use `--log` here to plot in log scale and use `--symmetric` to indicate that
-the image values are symmetric around zero. We need those two parameters for
-SLATS images, but it may not be case for other grayscale images. Here are three
-samples produced by `./scripts/plot_comparisons.py` comparing the UVCGAN
-translation (on left) to the target (on right).
+We use `--log` here to plot in log or symlog scale and use `--symmetric` to 
+indicate that the image values are symmetric around zero. We need those two 
+parameters for SLATS images, but it may not be case for other grayscale images. 
+Here are three samples produced by `./scripts/plot_comparisons.py` comparing the 
+`UVCGAN` translation (on left) to the target (on right).
 <p align="center">
   <img src="https://github.com/LS4GAN/gallery/blob/main/uvcgan4slats/img_comparison/sample_62.png" width="30%" title="translation_vs_target_sample_62">
   <img src="https://github.com/LS4GAN/gallery/blob/main/uvcgan4slats/img_comparison/sample_34.png" width="30%" title="translation_vs_target_sample_34">
@@ -118,13 +118,14 @@ translation (on left) to the target (on right).
 </p>
 
 # Train your own model
-In this part, we demonstrate how to train UVCGAN model on your own data. We will 
-discuss three topics: Prepare the dataset, Pre-train the generators (optional), 
-and Train image-to-image translation. 
+In this part, we demonstrate how to train `UVCGAN` model on your own dataset. We 
+will discuss three topics: Prepare the dataset, Pre-train the generators 
+(optional), and Train I2I translation. 
 
-For pretraining and training, we will use scripts for `SLATS` as examples. And 
-you can start with modifying the example scripts provided and graduately add 
-more customizations.
+For pretraining and training, we will use scripts for `SLATS` as examples. We 
+recommend making minimal modifications to the provided example scripts to 
+initiate the training process, and gradually adding further customizations to 
+achieve better results.
 
 ## 0. Dataset
 Please organized your dataset as follows:
@@ -171,11 +172,11 @@ use the BERT-like pretraining approach. We subdivide each image into a grid of
 zero. Then, we train a generator to fill in the blanks on the two domains 
 jointly. This generator is then used to initialize both generators for the 
 translation training. For more detail of pre-training on `SLATS`, see section 
-3.3.1 of the [`UVCGAN-for-SLATS` paper][uvcgan4slats_paper]. 
+3.3.1 of the [`UVCGAN4SLATS` paper][uvcgan4slats_paper]. 
 
-You may start with the scripts, 
+You may start with the script, 
 [`pretrain_slats-256.py`](./scripts/slats/pretrain_slats-256.py), for `SLATS` 
-with only changes to [dataset location][dataset_location], 
+with modifications to [dataset location][dataset_location], 
 [domain names][domain_names], [label][label], and [outdir][outdir]. Run the pre-
 training script as:
 ```
@@ -186,23 +187,31 @@ and `--batch_size`, respectively. All other parameters (e.g.
 generator/discriminator, optimizer, scheduler, masking, etc.) can be modified 
 directly in the script.
 
-## 2. Training:
-As for pre-training, you can simply start the I2I translation training with the script, [train_slats-256.py](./scripts/slats/train_slats-256.py), for `SLATS`  with only changes to [dataset location][dataset_location], 
-[domain names][domain_names], [label][label], [outdir][outdir], and where pretrained models can be located (the field [`transfer`][transfer] in the `args_dict`). However, if you choose to train from scratch without pre-trained generators, simply remove the field [`transfer`][transfer] in `args_dict` or set its value to `None`. Run the translation training as:
+## 2. Training
+Similar to pre-training, you can initiate the I2I translation training with the 
+script, [train_slats-256.py](./scripts/slats/train_slats-256.py), for `SLATS` 
+with modifications to [dataset location][dataset_location], 
+[domain names][domain_names], [label][label], [outdir][outdir], and where the 
+pre-trained generator can be located (field [`transfer`][transfer] in the 
+`args_dict`). However, if you choose to commence without pre-training, simply 
+remove the field [`transfer`][transfer] from `args_dict` or set its value to 
+`None`. Run the translation training as:
 ```
 python ./script/slats/train_slats-256.py
 ```
-### 2.1 Key hyper-parameters for optimal performance:
-Consider tuning the following parameters for better result:
+### 2.1 Key hyper-parameters for optimal performance
+Please consider tuning the following parameters for better result:
 1. **cycle-consistency loss coefficient `--lambda-cycle`**: 
   Equal to $\lambda_{\textrm{cyc}}$ in section 3.1 of the 
   [`UVCGAN` paper][uvcgan_paper], and $\lambda_{a}$ and $\lambda_{b}$ in section 
-  3.3.2 of the [`UVCGAN`-for-`SLATS` paper][uvcgan4slats_paper].
-1. **learning rates** `--lr-gen` and `--lr-disc`
+  3.3.2 of the [`UVCGAN4SLATS` paper][uvcgan4slats_paper].
+1. **learning rates `--lr-gen` and `--lr-disc`**: 
+  See dicussion in section 3.3.2 of the 
+  [`UVCGAN4SLATS` paper][uvcgan4slats_paper].
 1. **discriminator gradient penalty `--gp-constant` and `--gp-lambda`**: 
   In section 3.3 of the [`UVCGAN` paper][uvcgan_paper] and section 3.3.2 of the 
-  [`UVCGAN`-for-`SLATS` paper][uvcgan4slats_paper], we have `--gp-constant` 
-  $=\gamma$ and `--gp-lambda` $=\lambda_{\textrm{GP}}$.
+  [`UVCGAN4SLATS` paper][uvcgan4slats_paper], we have `gp-constant` 
+  $=\gamma$ and `gp-lambda` $=\lambda_{\textrm{GP}}$.
 
   
 
