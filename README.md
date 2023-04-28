@@ -112,14 +112,13 @@ The results are saved to
 `PATH_TO_PRETRAINED_MODELS/evals/final/ndarrays_eval-test`. In it are six 
 subfolders:
 - `fake_a` and `fake_b`: translated images. 
-  More precisely, let `G_ab` be the translator from domain `a` to 
-  domain `b` and let let `x` be an image from domain `a`, then `G_ab(x)` will be 
-  found in `fake_b`.
+  More precisely, let `G_ab` be the translator from domain `a` to domain `b` and 
+  let let `x` be an image from domain `a`, then `G_ab(x)` will be found in 
+  `fake_b`.
 - `real_a` and `real_b`: true images from their respective domains.
 - `reco_a` and `reco_b`: cyclically reconstructed images.
   More precisely, let `G_ba` be the translator from domain `b` to domain `a`, 
-  and let `x` be an image from domain `a`, then `G_ba(G_ba(x))` will be found in 
-  `reco_a`.
+  then `G_ba(G_ab(x))` will be found in `reco_a`.
 
 We can use `./scripts/plot_comparisons.py` to compare pairs of images. Denote
 the result folder by `RESULT`, then we can run the following command to generate
@@ -163,13 +162,13 @@ PATH/TO/YOUR/DATASET
 ```
 where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and
 `DOMAIN_A` and `DOMAIN_B` are the [domain names][domain_names].
-### 0.1 **Natural images**:
+### 0.1 Natural images
   If you images have extension `jepg`, `png`, `webp` [etc][image_ext]., please
   consider using [UVCGAN][uvcgan_repo] or [UVCGAN2][uvcgan2_repo] instead.
   However, if your images are grayscale but saved as multi-channel (like RGB) 
   images, you may also consider converting them to grayscale image and then
   to `NumPy` arrays.
-### 0.2 **`NumPy` arrays (saved with extension `.npz`)**:
+### 0.2 `NumPy` arrays (saved with extension `.npz`)
   - _no transform needed_:
     For a standalone example of data loading without transform, see 
     [`dataloading.py`][dataloading]. The dataset used in this script is an 
@@ -178,7 +177,7 @@ where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and
     For a standalone example of data loading with transform, see
     [`dataloading_transform.py`][dataloading_transform]. The dataset used in 
     this script is adapted from the [BRaTS 2021 Task 1 dataset][MRI_dataset].
-### 0.3 **Customized dataset API**:
+### 0.3 Customized dataset API
   In case you need to use your own dataset API, please save the script to
   [`./uvcgan/data/datasets`](./uvcgan/data/datasets) and update the
   `select_dataset` function in [`./uvcgan/data/data.py`](./uvcgan/data/data.py)
