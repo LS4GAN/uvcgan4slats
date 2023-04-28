@@ -118,7 +118,13 @@ translation (on left) to the target (on right).
 </p>
 
 # Train your own model
-In this part, we demonstrate how to train UVCGAN model on your own data. We will use SLATS as an example.
+In this part, we demonstrate how to train UVCGAN model on your own data. We will 
+discuss three topics: Prepare the dataset, Pre-train the generators (optional), 
+and Train image-to-image translation. 
+
+For pretraining and training, we will use scripts for `SLATS` as examples. And 
+you can start with modifying the example scripts provided and graduately add 
+more customizations.
 
 ## 0. Dataset
 Please organized your dataset as follows:
@@ -136,8 +142,8 @@ where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and
 ### 0.1 **Natural images**:
   If you images have extension `jepg`, `png`, `webp` [etc][image_ext]., please
   consider using [UVCGAN][uvcgan_repo] or [UVCGAN2][uvcgan2_repo] instead.
-  However, if your images are in fact grayscale but saved as multi-channel (like
-  RGB) images, you may also consider converting them to grayscale image and then
+  However, if your images are grayscale but saved as multi-channel (like RGB) 
+  images, you may also consider converting them to grayscale image and then
   to `NumPy` arrays.
 ### 0.2 **`NumPy` arrays (saved with extension `.npz`)**:
   - _no transform needed_:
@@ -150,12 +156,13 @@ where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and
     [`dataloading_transform.py`][dataloading_transform]. The dataset we used in 
     this script is adapted from the [BRaTS 2021 Task 1 dataset][MRI_dataset].
 ### 0.3 **Customized dataset API**:
-  In case you need to write your own dataset API, please save the script to
+  In case you need to use your own dataset API, please save the script to
   [`./uvcgan/data/datasets`](./uvcgan/data/datasets) and update the
   `select_dataset` function in [`./uvcgan/data/data.py`](./uvcgan/data/data.py)
   with your own dataset API.
 
 ## 1. Pretraining (optional but recommended)
+Unpaired image-to-image translation is a tough task. Hence, it is probably a better idea to start the training with prepared networks than kick off with randomly initialized ones. Pre-training helps us get "learned" generators :owl: And the advantange of pre-training is confirmed by multiple works (see section 5.3 of the [UVCGAN paper][uvcgan_paper] for more information). There are multiple ways for pre-training and here for `SLATS`, we used the BERT-like pretraining approach: we subdivide each image into a grid of 32 x 32 blocks and randomly replace the all values in 40% of the blocks with zero, and we train the both generators to learn to fill in the blank on the two domains jointly (which means the two generators have the same initialization for translation training). For more detail of pre-trainingn on `SLATS`, see section 3.3.1 of the [UVCGAN-for-SLATS paper][uvcgan4slats_paper]. 
 - **configuration file**: [./scripts/slats/pretrain_slats-256.py](./scripts/slats/pretrain_slats-256.py)
 - **command**: `python ./script/slats/pretrain_slats-256.py`
 - **hyper-parameters**: generator type (`--gen`) and batch size (`--batch_size`) can be configured using command line flags.
