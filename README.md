@@ -118,8 +118,7 @@ translation (on left) to the target (on right).
 </p>
 
 # Train your own model
-In this part, we demonstrate how to train UVCGAN model on your own data.
-We will use SLATS as an example.
+In this part, we demonstrate how to train UVCGAN model on your own data. We will use SLATS as an example.
 
 ## 0. Dataset
 Please organized your dataset as follows:
@@ -145,18 +144,16 @@ where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and
     You may start with reusing the scripts for `SLATS` with only changes to
     [dataset location][dataset_location], [domain names][domain_names],
     [label][label], and [outdir][outdir]. For a standalone example of data
-    loading without transform, see [`dataloading.py`][dataloading] for detail.
+    loading without transform, see [`dataloading.py`][dataloading].
   - _transform needed_:
     For a standalone example of data loading with transform, see
-    [`dataloading_transform.py`][dataloading_transform] for detail. The dataset
-    we used in this script is adapted from the
-    [BRaTS 2021 Task 1 dataset][MRI_dataset].
+    [`dataloading_transform.py`][dataloading_transform]. The dataset we used in 
+    this script is adapted from the [BRaTS 2021 Task 1 dataset][MRI_dataset].
 ### 0.3 **Customized dataset API**:
   In case you need to write your own dataset API, please save the script to
   [`./uvcgan/data/datasets`](./uvcgan/data/datasets) and update the
   `select_dataset` function in [`./uvcgan/data/data.py`](./uvcgan/data/data.py)
   with your own dataset API.
-
 
 ## 1. Pretraining (optional but recommended)
 - **configuration file**: [./scripts/slats/pretrain_slats-256.py](./scripts/slats/pretrain_slats-256.py)
@@ -178,18 +175,17 @@ All other parameters (e.g. generator/discriminator, optimizer, scheduler, maskin
 
 
 
-
+<!---References and Citations -->
 [uvcgan4slats_paper]: https://www.researchgate.net/publication/370024945_Unsupervised_Domain_Transfer_for_Science_Exploring_Deep_Learning_Methods_for_Translation_between_LArTPC_Detector_Simulations_with_Differing_Response_Models
 [uvcgan_paper]: https://openaccess.thecvf.com/content/WACV2023/html/Torbunov_UVCGAN_UNet_Vision_Transformer_Cycle-Consistent_GAN_for_Unpaired_Image-to-Image_Translation_WACV_2023_paper.html
 [uvcgan_repo]: https://github.com/LS4GAN/uvcgan
 [uvcgan2_paper]: https://arxiv.org/abs/2303.16280
 [uvcgan2_repo]: https://github.com/LS4GAN/uvcgan2
-
 [dataset_location]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L64
 [domain_names]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L69
 [label]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L111
 [outdir]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L112
 [MRI_dataset]: https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1
 [image_ext]: https://pytorch.org/vision/main/_modules/torchvision/datasets/folder.html
-[dataloading]: ./scripts/dataloading/dataloading.py
-[dataloading_transform]: ./scripts/dataloading/dataloading_transform.py
+[dataloading]: ./examples/dataloading/dataloading.py
+[dataloading_transform]: ./examples/dataloading/dataloading_transform.py
