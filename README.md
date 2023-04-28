@@ -91,7 +91,7 @@ Zenodo website, or use the downloading scripts:
 - **models**:
   To download trained models on `SLATS`, run
   ```
-  ./scripts/download_slats_models.sh`
+  ./scripts/download_slats_models.sh
   ```
   The files will be saved at `${UVCGAN_OUTDIR}/slats/pretrained` or 
   `./outdir/slats/pretrained` if `UVCGAN_OUTDIR` is unset.
