@@ -9,7 +9,7 @@ Science: Exploring Deep Learning Methods for Translation between LArTPC
 Detector Simulations with Differing Response Models_.
 
 In this readme file, we will describe how to apply `UVCGAN` to the `SLATS`
-dataset ([link](#run-inference-with-pretrained-translators)). We will also
+dataset ([link](#run-inference-with-pre-trained-translators)). We will also
 give a tutorial on how to apply `UVCGAN` to generic datasets
 ([link](#train-your-own-model)). Please don't hesitate to contact us if you
 encounter any challenges when applying `UVCGAN` to your work.
