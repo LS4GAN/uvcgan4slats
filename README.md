@@ -103,7 +103,7 @@ To run inference with pre-trained translators, run the following command in the
 ```
 python scripts/translate_data.py PATH_TO_PRETRAINED_MODELS
 ```
-If the pretrained models are downloaded using downloading script, 
+If the pretrained models are downloaded using the downloading script, 
 `PATH_TO_PRETRAINED_MODELS` here is either
 `${UVCGAN_OUTDIR}/slats/pretrained` or `./outdir/slats/pretrained` if
 `UVCGAN_OUTDIR` is unset.
