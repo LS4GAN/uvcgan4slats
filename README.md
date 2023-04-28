@@ -118,7 +118,7 @@ subfolders:
 - `real_a` and `real_b`: true images from their respective domains.
 - `reco_a` and `reco_b`: cyclically reconstructed images.
   More precisely, let `G_ba` be the translator from domain `b` to domain `a`, 
-  and let `x` be an image from domain `a`, then `G_baG_ba(x)` will be found in 
+  and let `x` be an image from domain `a`, then `G_ba(G_ba(x))` will be found in 
   `reco_a`.
 
 We can use `./scripts/plot_comparisons.py` to compare pairs of images. Denote
