@@ -64,12 +64,12 @@ python setup.py develop --user
 ## Environment Setup
 
 `uvcgan4slats` uses extensively two environment variables: `UVCGAN_DATA` to
-locate the dataset and `UVCGAN_OUTDIR` to save the output. Users are advised to set
-these environment variables. `uvcgan4slats` will look for datasets in the
-`${UVCGAN_DATA}` directory and will save results under the `${UVCGAN_OUTDIR}`
-directory. If these variables are not set, they will default to `./data` and
-`./outdir`, respectively. To set up the environment variables, run the
-following commands
+locate the dataset and `UVCGAN_OUTDIR` to save the output. Users are advised
+to set these environment variables. `uvcgan4slats` will look for datasets in
+the `${UVCGAN_DATA}` directory and will save results under the
+`${UVCGAN_OUTDIR}` directory. If these variables are not set, they will
+default to `./data` and `./outdir`, respectively. To set up the environment
+variables, run the following commands
 ```
 export UVCGAN_DATA=PATH_TO_DATASET
 export UVCGAN_OUTDIR=PATH_TO_OUTDIR
@@ -211,25 +211,27 @@ The exact modification will depend on the format of your dataset.
   [`UVCGAN`][uvcgan_repo] or [`UVCGANv2`][uvcgan2_repo] training scripts as a
   starting point.
 
-  To make those scripts work with your dataset, simply modify the path parameter
-  of the data configuration. The path should point to the location of your
-  dataset on a disk.
+  To make those scripts work with your dataset, simply modify the path
+  parameter of the data configuration. The path should point to the location
+  of your dataset on a disk.
 ### 0.2 Compressed `NumPy` arrays (`*.npz`)
-  We provide two examples of the data configurations that support the loading of
-  `npz` arrays:
-  1. Plain loading of `NumPy` arrays. The script [`dataloading.py`][dataloading]
-    demonstrates data configuration, suitable for loading `NumPy` arrays.
-    This script loads data samples from the `SLATS` dataset.
+  We provide two examples of the data configurations that support the loading
+  of `npz` arrays:
+  1. Plain loading of `NumPy` arrays. The script
+    [`dataloading.py`][dataloading] demonstrates data configuration, suitable
+    for loading `NumPy` arrays. This script loads data samples from the
+    `SLATS` dataset.
   1. Loading `NumPy` and performing additional transformations. The script
-    [`dataloading_transform.py`][dataloading_transform] shows an example of the data
-    configuration supporting user-defined transformations. This script is adapted
-    from the [BRaTS 2021 Task 1 dataset][MRI_dataset].
+    [`dataloading_transform.py`][dataloading_transform] shows an example of
+    the data configuration supporting user-defined transformations.
+    This script is adapted from the [BRaTS 2021 Task 1 dataset][MRI_dataset].
   1. Customized dataset. If you are working with a custom dataset that does not
     fall into the previous two categories, you will need to implement your
     `PyTorch` dataset and place it to
     [`./uvcgan/data/datasets`](./uvcgan/data/datasets). Then, modify the
-    `select_dataset` function of [`./uvcgan/data/data.py`](./uvcgan/data/data.py) to
-    support the usage of the custom dataset.
+    `select_dataset` function of
+    [`./uvcgan/data/data.py`](./uvcgan/data/data.py) to support the usage of
+    the custom dataset.
 
 ## 1. Pretraining (optional but recommended)
 Unpaired image-to-image translation presents a significant challenge. As such,
@@ -270,8 +272,9 @@ directly in the script.
 
 ## 2. Training
 
-Similar to the pre-training, you can initiate the `SLATS` I2I translation training
-with the script [`train_slats-256.py`](./script/slats/train_slats-256.py).
+Similar to the pre-training, you can initiate the `SLATS` I2I translation
+training with the script
+[`train_slats-256.py`](./script/slats/train_slats-256.py).
 
 Likewise, to modify this script for your dataset, change the following
 configuration options:
@@ -283,8 +286,9 @@ configuration options:
 - [`outdir`][train_outdir]: output directory
   (will contain a subfolder named by `label`)
 - [`transfer`][train_transfer]: The `transfer` configuration specifies how
-to load the pre-trained generators. If you chose not to use a pre-trained model,
-set this option to `None`. Otherwise, modify the path to the pre-trained model.
+to load the pre-trained generators. If you chose not to use a pre-trained
+model, set this option to `None`. Otherwise, modify the path to the
+pre-trained model.
 
 The translation training can be started with:
 ```
