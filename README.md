@@ -12,9 +12,10 @@ for Science: Exploring Deep Learning Methods for Translation between LArTPC
 Detector Simulations with Differing Response Models_.
 
 In the second [part](#train-your-own-model), we provide a tutorial on how 
-to apply `UVCGAN` to any domain translation problem. This part should serve 
-as a guide on who to apply `UVCGAN` to your work. Please don't hesitate to 
-contact us if you encounter any challenges in the process.
+to apply `UVCGAN` to any domain translation problem. The intention of this 
+part is to provide you with a roadmap for adapting `UVCGAN` for your project. 
+Please don't hesitate to contact us if you encounter any challenges in 
+the process.
 
 ## :tada::tada:Anoucements:tada::tada:
 We have released a new and improved version of `UVCGAN` -- 
@@ -89,8 +90,8 @@ from the other domain.
 
 The training of the `G_ab` and `G_ba` mappings is performed in a fully 
 unsupervised (unpaired) way. But, to facilitate the evaluation of the quality 
-of domain translation, the `SLATS` dataset also contains explicit pairing 
-between the events of the two domains.
+of translation, the `SLATS` dataset also contains explicit pairing between 
+the events of the two domains.
 
 In this section, we describe how to download the SLATS dataset, and how to use 
 `UVCGAN` to perform its domain translation.
@@ -179,7 +180,7 @@ scripts/slats/train_slats-256.py
 ```
 We recommend the following approach when adapting UVCGAN to you needs. Start 
 with one of the provided example scripts. Make minimal modifications to make it 
-work for your problem. Once it is working -- further customize the model 
+work for your problem. Once it is working, further customize the model 
 configuration to achieve the best results.
 
 ## 0. Dataset
@@ -193,8 +194,8 @@ PATH/TO/YOUR/DATASET
     ├── DOMAIN_A
     └── DOMAIN_B
 ```
-where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and
-`DOMAIN_A` and `DOMAIN_B` are the [domain names][domain_names].
+where `PATH/TO/YOUR/DATASET` is the path to your dataset and `DOMAIN_A` 
+and `DOMAIN_B` are the domain names.
 
 To make the training scripts, `pretrain_slats-256.py` and 
 `train_slats-256.py`, work with your dataset, they will 
@@ -250,12 +251,15 @@ The script [`pretrain_slats-256.py`](./scripts/slats/pretrain_slats-256.py)
 can be used for `SLATS` pre-training. If you need to adapt this script for 
 your own dataset, consider the modification of the following configuration 
 options:
-- data configuration, or just dataset location and domain names for simpler 
-cases.
-- `label`
-- `outdir`.
+- [`data`][pretrain_data] configuration, or for simpler cases, just
+  - [`path`][pretrain_path]: dataset location 
+  - [`domain names`][pretrain_domain_names]: the names of the domains
+- [`label`][pretrain_label]: label for this version of pre-training
+  (will be used to name a subfolder in `outdir`)
+- [`outdir`][pretrain_outdir]: output directory 
+  (will contain a subfolder named by `label`)
 
-The pre-training script can be run as:
+The pre-training can be started with:
 ```
 python ./script/slats/pretrain_slats-256.py
 ```
@@ -271,12 +275,16 @@ with the script [`train_slats-256.py`](./script/slats/train_slats-256.py).
 
 Likewise, to modify this script for your own dataset, change the following 
 configuration options:
-- `data` configuration, or just dataset location and domain names, for simpler cases.
-- `label`
-- `outdir`
-- `transfer`. The `transfer` configuration specifies how to load the pre-trained 
-generators. If you chose not to do the pre-training, set this option to None. 
-Otherwise, modify the path to the pre-trained model.
+- [`data`][train_data] configuration, or for simpler cases just 
+  - [`path`][train_path]: dataset location 
+  - [`domain names`][train_domain_names]: the names of the two domains
+- [`label`][train_label]: label for this version of training 
+  (will be used to name a subfolder in `outdir`)
+- [`outdir`][train_outdir]: output directory 
+  (will contain a subfolder named by `label`)
+- [`transfer`][train_transfer]: The `transfer` configuration specifies how 
+to load the pre-trained generators. If you chose not to use a pre-trained model, 
+set this option to `None`. Otherwise, modify the path to the pre-trained model.
 
 The I2I training can be started with:
 ```
@@ -306,12 +314,23 @@ Please consider tuning the following parameters for better result:
 [uvcgan_repo]: https://github.com/LS4GAN/uvcgan
 [uvcgan2_paper]: https://arxiv.org/abs/2303.16280
 [uvcgan2_repo]: https://github.com/LS4GAN/uvcgan2
-[dataset_location]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L64
-[domain_names]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L69
-[label]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L111
-[outdir]: https://github.com/pphuangyi/uvcgan4slats/blob/2ce2ec607c68a3d9d382659b515e28960ae6dd67/scripts/slats/pretrain_slats-256.py#L112
-[transfer]: https://github.com/pphuangyi/uvcgan4slats/blob/8593953347dbeab747319b5776c475750f88659a/scripts/slats/train_slats-256.py#L154
 [MRI_dataset]: https://www.kaggle.com/datasets/dschettler8845/brats-2021-task1
 [image_ext]: https://pytorch.org/vision/main/_modules/torchvision/datasets/folder.html
+
+<!---Permlinks -->
+[pretrain_data]: https://github.com/LS4GAN/uvcgan4slats/blob/e46e7596928f40e8e20eee518e55fa43897eb24e/scripts/slats/pretrain_slats-256.py#L58
+[pretrain_path]: https://github.com/LS4GAN/uvcgan4slats/blob/e46e7596928f40e8e20eee518e55fa43897eb24e/scripts/slats/pretrain_slats-256.py#L64
+[pretrain_domain_names]: https://github.com/LS4GAN/uvcgan4slats/blob/e46e7596928f40e8e20eee518e55fa43897eb24e/scripts/slats/pretrain_slats-256.py#L69
+[pretrain_label]: https://github.com/LS4GAN/uvcgan4slats/blob/e46e7596928f40e8e20eee518e55fa43897eb24e/scripts/slats/pretrain_slats-256.py#L111
+[pretrain_outdir]: https://github.com/LS4GAN/uvcgan4slats/blob/e46e7596928f40e8e20eee518e55fa43897eb24e/scripts/slats/pretrain_slats-256.py#L112
+
+[train_data]: https://github.com/LS4GAN/uvcgan4slats/blob/e46e7596928f40e8e20eee518e55fa43897eb24e/scripts/slats/train_slats-256.py#L95
+[train_path]: https://github.com/LS4GAN/uvcgan4slats/blob/e46e7596928f40e8e20eee518e55fa43897eb24e/scripts/slats/train_slats-256.py#L101
+[train_domain_names]: https://github.com/LS4GAN/uvcgan4slats/blob/e46e7596928f40e8e20eee518e55fa43897eb24e/scripts/slats/train_slats-256.py#L106
+[train_label]: https://github.com/LS4GAN/uvcgan4slats/blob/e46e7596928f40e8e20eee518e55fa43897eb24e/scripts/slats/train_slats-256.py#L166
+[train_outdir]: https://github.com/LS4GAN/uvcgan4slats/blob/e46e7596928f40e8e20eee518e55fa43897eb24e/scripts/slats/train_slats-256.py#L171
+[train_transfer]: https://github.com/LS4GAN/uvcgan4slats/blob/e46e7596928f40e8e20eee518e55fa43897eb24e/scripts/slats/train_slats-256.py#L154
+
+<!---Local files -->
 [dataloading]: ./examples/dataloading/dataloading.py
 [dataloading_transform]: ./examples/dataloading/dataloading_transform.py
