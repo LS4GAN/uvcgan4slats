@@ -221,10 +221,10 @@ The exact modification will depend on the format of your dataset.
   This script loads data samples from the `SLATS` dataset.
   1. Loading `NumPy` and performing additional transformations. The script 
   [`dataloading_transform.py`][dataloading_transform] shows an example of the data 
-  configuration, supporting user-defined transformations. This script is adapted 
+  configuration supporting user-defined transformations. This script is adapted 
   from the [BRaTS 2021 Task 1 dataset][MRI_dataset].
   1. Customized dataset. If you are working with a custom dataset that does not 
-  fall into the previous two categories, you will need to implememt your own 
+  fall into the previous two categories, you will need to implement your own 
   `PyTorch` dataset and place it to 
   [`./uvcgan/data/datasets`](./uvcgan/data/datasets). Then, modify the 
   `select_dataset` function of [`./uvcgan/data/data.py`](./uvcgan/data/data.py) to 
