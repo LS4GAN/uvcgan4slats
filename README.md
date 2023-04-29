@@ -214,7 +214,7 @@ The exact modification will depend on the format of your dataset.
   To make those scripts work with your dataset, simply modify the path parameter 
   of the data configuration. The path should point to the location of your 
   dataset on a disk.
-### 0.2 Compressed `NumPy` arrays (saved with extension `*.npz`)
+### 0.2 Compressed `NumPy` arrays (`*.npz`)
   We provide two examples of the data configurations that support the loading of 
   `npz` arrays:
   1. Plain loading of `NumPy` arrays. The script [`dataloading.py`][dataloading] 
