@@ -1,12 +1,12 @@
 import argparse
 import os
 
-from uvcgan import ROOT_OUTDIR, train
+from uvcgan import ROOT_DATA, ROOT_OUTDIR, train
 from uvcgan.utils.parsers import add_preset_name_parser, add_batch_size_parser
 
 def parse_cmdargs():
     parser = argparse.ArgumentParser(description = 'Pretrain SLATS-256 BERT')
-    add_preset_name_parser(parser, 'gen', GEN_PRESETS, 'uvcgan')
+    add_preset_name_parser(parser, 'gen', GEN_PRESETS, 'uvcgan', help_msg='generator type')
     add_batch_size_parser(parser, default = 64)
     return parser.parse_args()
 
@@ -59,14 +59,14 @@ args_dict = {
         'datasets' : [
             {
                 'dataset' : {
-                    'name'   : 'toyzero-precropped-v1',
+                    'name'   : 'ndarray-domain-hierarchy',
                     'domain' : domain,
                     'path'   : 'slats/slats_tiles/',
                 },
                 'shape'           : (1, 256, 256),
                 'transform_train' : None,
                 'transform_test'  : None,
-            } for domain in [ 'a', 'b' ]
+            } for domain in [ 'fake', 'real' ]
         ],
         'merge_type' : 'unpaired',
     },
@@ -115,4 +115,3 @@ args_dict = {
 }
 
 train(args_dict)
-

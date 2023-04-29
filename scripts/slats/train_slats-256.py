@@ -9,22 +9,41 @@ def parse_cmdargs():
         description = 'Train Slats translation'
     )
 
-    add_preset_name_parser(parser, 'gen',  GEN_PRESETS, 'uvcgan')
+    add_preset_name_parser(parser, 'gen',  GEN_PRESETS, 'uvcgan', help_msg='generator type')
 
-    parser.add_argument(
-        '--labmda-cycle', dest = 'lambda_cyc', type = float,
-        default = 1.0, help = 'magnitude of the cycle-consisntecy loss'
-    )
+    parser.add_argument('--labmda-cycle',
+                        dest = 'lambda_cyc',
+                        type = float,
+                        default = 1.0,
+                        help = 'magnitude of the cycle-consisntecy loss (default = 1.0)')
 
-    parser.add_argument(
-        '--lr-disc', dest = 'lr_disc', type = float,
-        default = 5e-5, help = 'learning rate of the discriminator'
-    )
+    parser.add_argument('--lr-disc',
+                        dest = 'lr_disc',
+                        type = float,
+                        default = 5e-5,
+                        help = 'learning rate of the discriminator (default = 5e-5)')
 
-    parser.add_argument(
-        '--lr-gen', dest = 'lr_gen', type = float,
-        default = 1e-5, help = 'learning rate of the generator'
-    )
+    parser.add_argument('--lr-gen',
+                        dest = 'lr_gen',
+                        type = float,
+                        default = 1e-5,
+                        help = 'learning rate of the generator (default = 1e-5)')
+
+    parser.add_argument('--gp-constant',
+                        dest = 'constant_gp',
+                        type = float,
+                        default = 10.,
+                        help = ('the constant gamma for gradient penalty (default = 10). '
+                                'See the UVCGAN paper (https://arxiv.org/pdf/2203.02557.pdf) '
+                                'section 3.3 for more detail.'))
+
+    parser.add_argument('--gp-lambda',
+                        dest = 'lambda_gp',
+                        type = float,
+                        default = 1.,
+                        help = ('the coefficient of the gradient penalty (default = 1). '
+                                'See the UVCGAN paper (https://arxiv.org/pdf/2203.02557.pdf) '
+                                'section 3.3 for more detail.'))
 
     return parser.parse_args()
 
@@ -77,14 +96,14 @@ args_dict = {
         'datasets' : [
             {
                 'dataset' : {
-                    'name'   : 'toyzero-precropped-v1',
+                    'name'   : 'ndarray-domain-hierarchy',
                     'domain' : domain,
                     'path'   : 'slats/slats_tiles/',
                 },
                 'shape'           : (1, 256, 256),
                 'transform_train' : None,
                 'transform_test'  : None,
-            } for domain in [ 'a', 'b' ]
+            } for domain in [ 'fake', 'real' ]
         ],
         'merge_type' : 'unpaired',
     },
@@ -128,8 +147,8 @@ args_dict = {
     },
     'loss' : 'lsgan',
     'gradient_penalty' : {
-        'constant'  : 10,
-        'lambda_gp' : 0.01,
+        'constant'  : cmdargs.constant_gp,
+        'lambda_gp' : cmdargs.lambda_gp / (cmdargs.constant_gp ** 2),
     },
     'steps_per_epoch'  : 2000,
     'transfer' : {

@@ -8,16 +8,19 @@ def add_model_state_parser(parser):
         choices = [ MODEL_STATE_TRAIN, MODEL_STATE_EVAL ],
         default = 'eval',
         dest    = 'model_state',
-        help    = "evaluate model in 'train' or 'eval' states",
+        help    = "evaluate model in 'train' or 'eval' states (default = eval)",
         type    = str,
     )
 
 def add_plot_extension_parser(parser, default = ( 'png', )):
+
+    default = None if default is None else list(default)
+
     parser.add_argument(
         '-e', '--ext',
-        default = None if default is None else list(default),
+        default = default,
         dest    = 'ext',
-        help    = 'plot extensions',
+        help    = f'plot extensions (default = {default})',
         type    = str,
         nargs   = '+',
     )
@@ -27,7 +30,7 @@ def add_batch_size_parser(parser, default = 1):
         '--batch-size',
         default = default,
         dest    = 'batch_size',
-        help    = 'batch size to use for evaluation',
+        help    = f'batch size (default = {default})',
         type    = int,
     )
 
@@ -36,7 +39,7 @@ def add_n_eval_samples_parser(parser, default = None):
         '-n',
         default = default,
         dest    = 'n_eval',
-        help    = 'number of samples to use for evaluation',
+        help    = f'number of samples to use for evaluation (default = {default})',
         type    = int,
     )
 
@@ -56,7 +59,7 @@ def add_split_parser(parser, default = SPLIT_TEST):
         choices = [ SPLIT_TRAIN, SPLIT_TEST, SPLIT_VAL ],
         default = default,
         dest    = 'split',
-        help    = 'data split',
+        help    = f'data split (default = {default})',
         type    = str,
     )
 
@@ -69,7 +72,7 @@ def add_eval_epoch_parser(parser, default = None):
             'checkpoint epoch to evaluate.'
             ' If not specified, then the evaluation will be performed for'
             ' the final model. If epoch is -1, then the evaluation will'
-            ' be performed for the last checkpoint.'
+            f' be performed for the last checkpoint. (default = {default})'
         ),
         type    = int,
     )
@@ -85,12 +88,15 @@ def add_model_directory_parser(parser):
 def add_preset_name_parser(
     parser, name, presets, default = None, help_msg = None,
 ):
+    help_str = help_msg or name
+    help_str += f' (default = {default})'
+
     parser.add_argument(
         f'--{name}',
         default = default,
         dest    = name,
         choices = list(presets),
-        help    = help_msg or name,
+        help    = help_str,
         type    = str,
     )
 

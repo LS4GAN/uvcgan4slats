@@ -21,6 +21,9 @@ TRANSFORM_DICT = {
 }
 
 def select_single_transform(transform):
+    if callable(transform):
+        return transform
+
     name, kwargs = extract_name_kwargs(transform)
 
     if name not in TRANSFORM_DICT:
