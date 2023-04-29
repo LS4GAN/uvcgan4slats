@@ -254,6 +254,7 @@ options:
 cases.
 - `label`
 - `outdir`.
+
 The pre-training script can be run as:
 ```
 python ./script/slats/pretrain_slats-256.py
