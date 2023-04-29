@@ -12,7 +12,7 @@ for Science: Exploring Deep Learning Methods for Translation between LArTPC
 Detector Simulations with Differing Response Models_.
 
 In the second [part](#train-your-own-model), we provide a tutorial on how 
-to apply `UVCGAN` to any domain translation problem. This part intend to 
+to apply `UVCGAN` to any domain translation problem. This part intends to 
 provide you with a roadmap for adapting `UVCGAN` for your project. 
 Please don't hesitate to contact us if you encounter any challenges in 
 the process.
@@ -64,7 +64,7 @@ python setup.py develop --user
 ## Environment Setup
 
 `uvcgan4slats` uses extensively two environment variables: `UVCGAN_DATA` to
-locate the dataset and `UVCGAN_OUTDIR` to save output. Users are advised to set
+locate the dataset and `UVCGAN_OUTDIR` to save the output. Users are advised to set
 these environment variables. `uvcgan4slats` will look for datasets in the
 `${UVCGAN_DATA}` directory and will save results under the `${UVCGAN_OUTDIR}`
 directory. If these variables are not set, they will default to `./data` and
@@ -168,7 +168,7 @@ the `UVCGAN` translation (on the left) to the target (on the right).
 </p>
 
 # Train your own model
-In this part, we demonstrate how to train `UVCGAN` model on your own dataset. 
+In this part, we demonstrate how to train `UVCGAN` model on your dataset. 
 We will discuss three topics: Prepare the dataset, Pre-train the generators 
 (optional), and Train I2I translation.
 
@@ -199,7 +199,7 @@ and `DOMAIN_B` are the domain names.
 
 To make the training scripts, `pretrain_slats-256.py` and 
 `train_slats-256.py`, work with your dataset, they will 
-require minimal modifications. In essence, each script contains a python 
+require minimal modifications. In essence, each script contains a `Python` 
 dictionary describing the training configuration. You would need to 
 modify the data section of that dictionary to make it work with your dataset.
 The exact modification will depend on the format of your dataset.
@@ -298,7 +298,7 @@ Please consider tuning the following parameters for better results:
   [`UVCGAN` paper][uvcgan_paper], and $\lambda_{a}$ and $\lambda_{b}$ in
   section 3.3.2 of the [`UVCGAN4SLATS` paper][uvcgan4slats_paper].
 1. **learning rates `--lr-gen` and `--lr-disc`**:
-  See dicussion in section 3.3.2 of the
+  See the dicussion in section 3.3.2 of the
   [`UVCGAN4SLATS` paper][uvcgan4slats_paper].
 1. **discriminator gradient penalty `--gp-constant` and `--gp-lambda`**:
   In section 3.3 of the [`UVCGAN` paper][uvcgan_paper] and section 3.3.2 of
