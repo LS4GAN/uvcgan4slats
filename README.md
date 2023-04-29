@@ -25,7 +25,6 @@ photographic datasets (CelebA-HQ and AFHQ).
 You don't want to miss out on this upgrade, so go ahead and check it out!
 ([paper][uvcgan2_paper], [repo][uvcgan2_repo])
 
-
 # Installation and requirements
 
 ## Requirements
@@ -78,6 +77,7 @@ export UVCGAN_OUTDIR=PATH_TO_OUTDIR
 # Neutrino Detector Response Translation
 
 ## The `SLATS` Dataset
+
 The Simple Liquid Argon Track Samples (`SLATS`) dataset was created from
 simulated neutrino events in a Liquid Argon Time-Projection Chamber (LArTPC)
 detector. The dataset contains two domains of events, each corresponding to a
@@ -125,6 +125,7 @@ the Zenodo website, or use the downloading scripts:
   `./outdir/slats/pretrained` if `UVCGAN_OUTDIR` is unset.
 
 # Run inference with pre-trained translators
+
 To run an inference with pre-trained translators, run the following command
 in the `uvcgan4slats` source folder
 ```
@@ -158,6 +159,7 @@ python ./scripts/plot_comparisons.py RESULT/fake_b RESULT/real_b \
 We use `--log` here to plot in log or symlog scale and use `--symmetric` to
 indicate that the values are symmetric around zero. We need those two
 parameters for `SLATS` images, but it may not be the case for other
+
 grayscale images.
 Here are three samples produced by `./scripts/plot_comparisons.py` comparing
 the `UVCGAN` translation (on the left) to the target (on the right).
@@ -232,6 +234,7 @@ The exact modification will depend on the format of your dataset.
     `select_dataset` function of
     [`./uvcgan/data/data.py`](./uvcgan/data/data.py) to support the usage of
     the custom dataset.
+
 
 ## 1. Pretraining (optional but recommended)
 Unpaired image-to-image translation presents a significant challenge. As such,
