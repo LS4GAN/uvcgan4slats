@@ -226,8 +226,8 @@ The exact modification will depend on the format of your dataset.
   1. Customized dataset. If you are working with a custom dataset that does not 
   fall into the previous two categories, you will need to implememt your own 
   `PyTorch` dataset and place it to 
-  [`./uvcgan/data/datasets`][./uvcgan/data/datasets]. Then, modify the 
-  `select_dataset` function of [`./uvcgan/data/data.py`][./uvcgan/data/data.py] to 
+  [`./uvcgan/data/datasets`](./uvcgan/data/datasets). Then, modify the 
+  `select_dataset` function of [`./uvcgan/data/data.py`](./uvcgan/data/data.py) to 
   support the usage of the custom dataset.
 
 ## 1. Pretraining (optional but recommended)
@@ -246,7 +246,7 @@ jointly. This generator is then used to initialize both generators for the
 translation training. For more detail of pre-training on `SLATS`, see section
 3.3.1 of the [`UVCGAN4SLATS` paper][uvcgan4slats_paper].
 
-The script [`pretrain_slats-256.py`][./scripts/slats/pretrain_slats-256.py] 
+The script [`pretrain_slats-256.py`](./scripts/slats/pretrain_slats-256.py) 
 can be used for `SLATS` pre-training. If you need to adapt this script for 
 your own dataset, consider the modification of the following configuration 
 options:
@@ -266,7 +266,7 @@ directly in the script.
 ## 2. Training
 
 Similar to the pre-training, you can initiate the SLATS I2I translation training
-with the script [`train_slats-256.py`][./script/slats/train_slats-256.py].
+with the script [`train_slats-256.py`](./script/slats/train_slats-256.py).
 
 Likewise, to modify this script for your own dataset, change the following 
 configuration options:
