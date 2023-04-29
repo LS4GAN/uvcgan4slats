@@ -1,33 +1,25 @@
 # Unpaired Image-to-Image Translation of the `SLATS` dataset with `UVCGAN`
 
-This repo documents the application of the UNet Vision Transformer cycle-
-consistent GAN, or `UVCGAN` ([Paper][uvcgan_paper], [repo][uvcgan_repo]),
-to the scientific dataset `SLATS` from neutrino experiment simulation.
-More detail about the project can be found in the
-[`UVCGAN4SLATS` paper][uvcgan4slats_paper]: _Unsupervised Domain Transfer for
-Science: Exploring Deep Learning Methods for Translation between LArTPC
+This repository demonstrates application of the unpaired image-to-image 
+translation method `UVCGAN` ([Paper][uvcgan_paper], [repo][uvcgan_repo]) 
+to the domain translation problem, common in science.
+
+This README file has two main parts. In the first 
+[part](#neutrino-detector-response-transfer), we describe how to 
+apply `UVCGAN` to the translation of a LArTPC detector response, following 
+the [`UVCGAN4SLATS` paper][uvcgan_paper]: _Unsupervised Domain Transfer 
+for Science: Exploring Deep Learning Methods for Translation between LArTPC 
 Detector Simulations with Differing Response Models_.
 
-In this readme file, we will describe how to apply `UVCGAN` to the `SLATS`
-dataset ([link](#run-inference-with-pre-trained-translators)). We will also
-give a tutorial on how to apply `UVCGAN` to generic datasets
-([link](#train-your-own-model)). Please don't hesitate to contact us if you
-encounter any challenges when applying `UVCGAN` to your work.
-
-The dataset, **Simple Liquid Argon Track Samples (`SLATS`)**, was created from
-simulated neutrino experiments. It has two domains, each representing a
-specific detector response that simulates what would occur in a Liquid Argon
-Time-Projection Chamber (LArTPC). Unlike typical natural image datasets such as
-CelebA and AFHQ used for unpaired I2I translation algorithm training, `SLATS`
-is a paired dataset. Nevertheless, the data can be loaded in an unpaired manner
-to train an unpaired translation algorithm. The pairedness of the dataset
-facilitates the evaluation of a neural translator's performance by comparing a
-translation directly to its intended target. This is particularly useful in
-scientific experiments where unambiguous translator operation is crucial.
+In the second [part](#train-your-own-model), we provide a tutorial on how 
+to apply `UVCGAN` to any domain translation problem. This part should serve 
+as a guide on who to apply `UVCGAN` to your work. Please don't hesitate to 
+contact us if you encounter any challenges in the process.
 
 ## :tada::tada:Anoucements:tada::tada:
 We have released a new and improved version of `UVCGAN` -- `UVCGANv2` -- that
 delivers outstanding results on photographic datasets (CelebA-HQ and AFHQ).
+
 You don't want to miss out on this upgrade, so go ahead and check it out!
 ([paper][uvcgan2_paper], [repo][uvcgan2_repo])
 
@@ -81,7 +73,28 @@ export UVCGAN_DATA=PATH_TO_DATASET
 export UVCGAN_OUTDIR=PATH_TO_OUTDIR
 ```
 
-# Download `SLATS` and pre-trained models
+# Neutrino Detector Response Translation
+
+## The `SLATS` Dataset
+The Simple Liquid Argon Track Samples (`SLATS`) dataset was created from 
+simulated neutrino events in a Liquid Argon Time-Projection Chamber (LArTPC) 
+detector. The dataset contains two domains of events, each corresponding a 
+specific detector response function.
+
+The unpaired image-to-image translation method `UVCGAN` is used to find two 
+mappings `G_ab` and `G_ba`. These mapping can take a neutrino event from one 
+domain, modify its detector response, and make it look like a neutrino event 
+from the other domain.
+
+The training of the `G_ab` and `G_ba` mappings is performed in a fully 
+unsupervised (unpaired) way. But, to facilitate the evaluation of the quality 
+of domain translation, the `SLATS` dataset also contains explicit pairing 
+between the events of the two domains.
+
+In this section, we describe how to download the SLATS dataset, and how to use 
+`UVCGAN` to perform its domain translation.
+
+## Download `SLATS` and pre-trained models
 The [datasets](https://zenodo.org/record/7809108) and pretrained
 [models](https://zenodo.org/record/7853835) can be downloaded directly from
 the Zenodo website, or use the downloading scripts:
