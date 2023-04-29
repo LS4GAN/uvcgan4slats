@@ -93,7 +93,7 @@ unsupervised (unpaired) way. But, to facilitate the evaluation of the quality
 of translation, the `SLATS` dataset also contains explicit pairing between
 the events of the two domains.
 
-In this section, we describe how to download the SLATS dataset, and how to use
+In this section, we describe how to download the `SLATS` dataset, and how to use
 `UVCGAN` to perform its domain translation.
 
 ## Download `SLATS` and pre-trained models
@@ -178,7 +178,7 @@ will use `SLATS` scripts as examples:
 scripts/slats/pretrain_slats-256.py
 scripts/slats/train_slats-256.py
 ```
-We recommend the following approach when adapting UVCGAN to you needs. Start
+We recommend the following approach when adapting `UVCGAN` to you needs. Start
 with one of the provided example scripts. Make minimal modifications to make it
 work for your problem. Once it is working, further customize the model
 configuration to achieve the best results.
