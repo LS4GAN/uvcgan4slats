@@ -252,8 +252,8 @@ your own dataset, consider the modification of the following configuration
 options:
 - data configuration, or just dataset location and domain names for simpler 
 cases.
-- label
-- outdir.
+- `label`
+- `outdir`.
 The pre-training script can be run as:
 ```
 python ./script/slats/pretrain_slats-256.py
@@ -271,9 +271,9 @@ with the script [`train_slats-256.py`][./script/slats/train_slats-256.py].
 Likewise, to modify this script for your own dataset, change the following 
 configuration options:
 - data configuration, or just dataset location and domain names, for simpler cases.
-- label
-- outdir
-- transfer. The `transfer` configuration specifies how to load the pre-trained 
+- `label`
+- `outdir`
+- `transfer`. The `transfer` configuration specifies how to load the pre-trained 
 generators. If you chose not to do the pre-training, set this option to None. 
 Otherwise, modify the path to the pre-trained model.
 
