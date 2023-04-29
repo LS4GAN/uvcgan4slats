@@ -17,8 +17,9 @@ as a guide on who to apply `UVCGAN` to your work. Please don't hesitate to
 contact us if you encounter any challenges in the process.
 
 ## :tada::tada:Anoucements:tada::tada:
-We have released a new and improved version of `UVCGAN` -- `UVCGANv2` -- that
-delivers outstanding results on photographic datasets (CelebA-HQ and AFHQ).
+We have released a new and improved version of `UVCGAN` -- 
+[`UVCGANv2`][uvcgan2_repo] -- that delivers outstanding results on 
+photographic datasets (CelebA-HQ and AFHQ).
 
 You don't want to miss out on this upgrade, so go ahead and check it out!
 ([paper][uvcgan2_paper], [repo][uvcgan2_repo])
@@ -194,26 +195,40 @@ PATH/TO/YOUR/DATASET
 ```
 where `PATH/TO/YOUR/DATASET` is the [dataset location][dataset_location] and
 `DOMAIN_A` and `DOMAIN_B` are the [domain names][domain_names].
+
+To make the training scripts, `pretrain_slats-256.py` and 
+`train_slats-256.py`, work with your dataset, they will 
+require minimal modifications. In essense, each script contains a python 
+dictionary describing the training configuration. You would need to 
+modify the data section of that dictionary to make it work with your dataset.
+The exact modification will depend on the format of your dataset.
+
 ### 0.1 Natural images
-  If you images have extension `jepg`, `png`, `webp` [etc][image_ext]., please
-  consider using [`UVCGAN`][uvcgan_repo] or [`UVCGANv2`][uvcgan2_repo] instead.
-  However, if your images are grayscale but saved as multi-channel (like RGB)
-  images, you may also consider converting them to grayscale image and then
-  to `NumPy` arrays.
-### 0.2 `NumPy` arrays (saved with extension `.npz`)
-  - _no transform needed_:
-    For a standalone example of data loading without transform, see
-    [`dataloading.py`][dataloading]. The dataset used in this script is an
-    excerpt from the `SLATS` dataset.
-  - _transform needed_:
-    For a standalone example of data loading with transform, see
-    [`dataloading_transform.py`][dataloading_transform]. The dataset used in
-    this script is adapted from the [BRaTS 2021 Task 1 dataset][MRI_dataset].
-### 0.3 Customized dataset API
-  In case you need to use your own dataset API, please save the script to
-  [`./uvcgan/data/datasets`](./uvcgan/data/datasets) and update the
-  `select_dataset` function in [`./uvcgan/data/data.py`](./uvcgan/data/data.py)
-  with your own dataset API.
+  This repository is primarily focused on scientific datasets. If your dataset 
+  is made of natural images in common formats (`jepg`, `png`, `webp`, 
+  [etc.][image_ext]), you may find it more useful to take one of the 
+  [`UVCGAN`][uvcgan_repo] or [`UVCGANv2`][uvcgan2_repo] training scripts as a 
+  staring point.
+  
+  To make those scripts work with your dataset, simply modify the path parameter 
+  of the data configuration. The path should to point to the location of your 
+  dataset on a disk.
+### 0.2 Compressed `NumPy` arrays (saved with extension `*.npz`)
+  We provide two examples of the data configurations that support the loading of 
+  `npz` arrays:
+  1. Plain loading of `NumPy` arrays. The script [`dataloading.py`][dataloading] 
+  demonstrates data configuration, suitable for loading of the `NumPy` arrays. 
+  This script loads data samples from the `SLATS` dataset.
+  1. Loading `NumPy` and performing additional transformations. The script 
+  [`dataloading_transform.py`][dataloading_transform] shows an example of the data 
+  configuration, supporting user-defined transformations. This script is adapted 
+  from the [BRaTS 2021 Task 1 dataset][MRI_dataset].
+  1. Customized dataset. If you are working with a custom dataset that does not 
+  fall into the previous two categories, you will need to implememt your own 
+  `PyTorch` dataset and place it to 
+  [`./uvcgan/data/datasets`][./uvcgan/data/datasets]. Then, modify the 
+  `select_dataset` function of [`./uvcgan/data/data.py`][./uvcgan/data/data.py] to 
+  support the usage of the custom dataset.
 
 ## 1. Pretraining (optional but recommended)
 Unpaired image-to-image translation presents a significant challenge. As such,
@@ -221,7 +236,9 @@ it may be advantageous to start the training with prepared networks, rather
 than randomly initialized ones. And the advantange of pre-training is
 confirmed by multiple works (see section 5.3 of the
 [`UVCGAN` paper][uvcgan_paper] for more
-information). There are a number of ways for pre-training. Here for `SLATS`,
+information). 
+
+There are a number of ways for pre-training. Here for `SLATS`,
 we use the BERT-like pretraining approach. We subdivide each image into a grid
 of 32 x 32 blocks and randomly replace the all values in 40% of the blocks
 with zero. Then, we train a generator to fill in the blanks on the two domains
@@ -229,31 +246,42 @@ jointly. This generator is then used to initialize both generators for the
 translation training. For more detail of pre-training on `SLATS`, see section
 3.3.1 of the [`UVCGAN4SLATS` paper][uvcgan4slats_paper].
 
-You may start with the script,
-[`pretrain_slats-256.py`](./scripts/slats/pretrain_slats-256.py), for `SLATS`
-with modifications to [dataset location][dataset_location],
-[domain names][domain_names], [label][label], and [outdir][outdir]. Run the
-pre-training script as:
+The script [`pretrain_slats-256.py`][./scripts/slats/pretrain_slats-256.py] 
+can be used for `SLATS` pre-training. If you need to adapt this script for 
+your own dataset, consider the modification of the following configuration 
+options:
+- data configuration, or just dataset location and domain names for simpler 
+cases.
+- label
+- outdir.
+The pre-training script can be run as:
 ```
 python ./script/slats/pretrain_slats-256.py
 ```
-Generator type and batch size can be configured using command-line flags
-`--gen` and `--batch_size`, respectively. All other parameters (e.g.
-generator/discriminator, optimizer, scheduler, masking, etc.) can be modified
+The type of the generator and batch size can be configured using command-line 
+flags `--gen` and `--batch_size`, respectively. All the other parameters (e.g. 
+generator/discriminator, optimizer, scheduler, masking, etc.) can be modified 
 directly in the script.
 
 ## 2. Training
-Similar to pre-training, you can initiate the I2I translation training with
-the script, [train_slats-256.py](./scripts/slats/train_slats-256.py), for
-`SLATS` with modifications to [dataset location][dataset_location],
-[domain names][domain_names], [label][label], [outdir][outdir], and where the
-pre-trained generator can be located (field [`transfer`][transfer] in the
-`args_dict`). However, if you choose to commence without pre-training, simply
-remove the field [`transfer`][transfer] from `args_dict` or set its value to
-`None`. Run the translation training as:
+
+Similar to the pre-training, you can initiate the SLATS I2I translation training
+with the script [`train_slats-256.py`][./script/slats/train_slats-256.py].
+
+Likewise, to modify this script for your own dataset, change the following 
+configuration options:
+- data configuration, or just dataset location and domain names, for simpler cases.
+- label
+- outdir
+- transfer. The `transfer` configuration specifies how to load the pre-trained 
+generators. If you chose not to do the pre-training, set this option to None. 
+Otherwise, modify the path to the pre-trained model.
+
+The I2I training can be started with:
 ```
 python ./script/slats/train_slats-256.py
 ```
+
 ### 2.1 Key hyper-parameters for optimal performance
 Please consider tuning the following parameters for better result:
 1. **cycle-consistency loss coefficient `--lambda-cycle`**:
