@@ -266,12 +266,12 @@ directly in the script.
 
 ## 2. Training
 
-Similar to the pre-training, you can initiate the SLATS I2I translation training
+Similar to the pre-training, you can initiate the `SLATS` I2I translation training
 with the script [`train_slats-256.py`](./script/slats/train_slats-256.py).
 
 Likewise, to modify this script for your own dataset, change the following 
 configuration options:
-- data configuration, or just dataset location and domain names, for simpler cases.
+- `data` configuration, or just dataset location and domain names, for simpler cases.
 - `label`
 - `outdir`
 - `transfer`. The `transfer` configuration specifies how to load the pre-trained 
