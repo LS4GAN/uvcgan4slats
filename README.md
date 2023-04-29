@@ -5,7 +5,7 @@ translation method `UVCGAN` ([Paper][uvcgan_paper], [repo][uvcgan_repo])
 to the domain translation problem, common in science.
 
 This README file has two main parts. In the first 
-[part](#neutrino-detector-response-transfer), we describe how to 
+[part](#neutrino-detector-response-translation), we describe how to 
 apply `UVCGAN` to the translation of a LArTPC detector response, following 
 the [`UVCGAN4SLATS` paper][uvcgan_paper]: _Unsupervised Domain Transfer 
 for Science: Exploring Deep Learning Methods for Translation between LArTPC 
@@ -166,14 +166,20 @@ the `UVCGAN` translation (on left) to the target (on right).
 </p>
 
 # Train your own model
-In this part, we demonstrate how to train `UVCGAN` model on your own dataset.
-We will discuss three topics: Prepare the dataset, Pre-train the generators
+In this part, we demonstrate how to train `UVCGAN` model on your own dataset. 
+We will discuss three topics: Prepare the dataset, Pre-train the generators 
 (optional), and Train I2I translation.
 
-For pretraining and training, we will use scripts for `SLATS` as examples. We
-recommend making minimal modifications to the provided example scripts to
-initiate the training process, and gradually adding further customizations to
-achieve better results.
+For the generator pre-training and image-to-image translation training, we 
+will use `SLATS` scripts as examples:
+```
+scripts/slats/pretrain_slats-256.py
+scripts/slats/train_slats-256.py
+```
+We recommend the following approach when adapting UVCGAN to you needs. Start 
+with one of the provided example scripts. Make minimal modifications to make it 
+work for your problem. Once it is working -- further customize the model 
+configuration to achieve the best results.
 
 ## 0. Dataset
 Please organized your dataset as follows:
