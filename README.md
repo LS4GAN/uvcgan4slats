@@ -256,7 +256,7 @@ options:
   - [`domain names`][pretrain_domain_names]: the names of the domains
 - [`label`][pretrain_label]: label for this version of pre-training
   (will be used to name a subfolder in `outdir`)
-- [`outdir`][pretrain_outdir]:output directory 
+- [`outdir`][pretrain_outdir]: output directory 
   (will contain a subfolder named by `label`)
 
 The pre-training can be started with:
