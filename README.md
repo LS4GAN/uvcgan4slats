@@ -158,9 +158,7 @@ python ./scripts/plot_comparisons.py RESULT/fake_b RESULT/real_b \
 ```
 We use `--log` here to plot in log or symlog scale and use `--symmetric` to
 indicate that the values are symmetric around zero. We need those two
-parameters for `SLATS` images, but it may not be the case for other
-
-grayscale images.
+parameters for `SLATS` images, but it may not be the case for other grayscale images.
 Here are three samples produced by `./scripts/plot_comparisons.py` comparing
 the `UVCGAN` translation (on the left) to the target (on the right).
 <p align="center">
