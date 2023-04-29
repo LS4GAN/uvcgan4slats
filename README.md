@@ -259,7 +259,7 @@ options:
 - [`outdir`][pretrain_outdir]: output directory
   (will contain a subfolder named by `label`)
 
-The pre-training can be started with:
+The generator pre-training can be started with:
 ```
 python ./script/slats/pretrain_slats-256.py
 ```
@@ -286,7 +286,7 @@ configuration options:
 to load the pre-trained generators. If you chose not to use a pre-trained model,
 set this option to `None`. Otherwise, modify the path to the pre-trained model.
 
-The I2I training can be started with:
+The translation training can be started with:
 ```
 python ./script/slats/train_slats-256.py
 ```
