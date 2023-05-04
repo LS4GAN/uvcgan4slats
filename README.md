@@ -61,7 +61,8 @@ python setup.py develop --user
 ```
 The `setup` command must be run in the `uvcgan4slats` conda environment.
 
-**Note**: if you run the `setup` command with `sudo`, remove `--user`.
+**Note**: if you run the `setup` commands above with `sudo`, please remove 
+`--user`.
 
 ## Environment Setup
 
