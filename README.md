@@ -36,7 +36,7 @@ environment can be created by running the following command from the
 ```
 conda env create -f contrib/conda_env.yml
 ```
-Later on, the environment can be activated by running
+Activat the environment by running
 ```
 conda activate uvcgan4slats
 ```
@@ -44,10 +44,11 @@ conda activate uvcgan4slats
 ## Installation
 
 To install the `uvcgan4slats` package, run the following command from the
-`uvcgan4slats` source folder.
+`uvcgan4slats` source folder. 
 ```
 python setup.py develop --user
 ```
+Make sure to run setup in the `uvcgan4slats` conda environment.
 
 ## Dependencies
 
