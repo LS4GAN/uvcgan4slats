@@ -59,7 +59,9 @@ git clone https://github.com/LS4GAN/toytools
 cd toytools
 python setup.py develop --user
 ```
-(the last command must be run in the `uvcgan4slats` conda environment)
+The `setup` command must be run in the `uvcgan4slats` conda environment.
+
+**Note**: if you run the `setup` command with `sudo`, remove `--user`.
 
 ## Environment Setup
 
