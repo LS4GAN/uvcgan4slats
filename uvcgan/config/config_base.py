@@ -1,6 +1,13 @@
 import json
 import hashlib
 
+
+def default(x):
+    if callable(x):
+        return "callable"
+    return x.to_dict()
+
+
 class ConfigBase:
 
     __slots__ = []
@@ -9,7 +16,8 @@ class ConfigBase:
         return { x : getattr(self, x) for x in self.__slots__ }
 
     def to_json(self, **kwargs):
-        return json.dumps(self, default = lambda x : x.to_dict(), **kwargs)
+        # return json.dumps(self, default = lambda x : x.to_dict(), **kwargs)
+        return json.dumps(self, default = default, **kwargs)
 
     def __getitem__(self, key):
         return getattr(self, key)

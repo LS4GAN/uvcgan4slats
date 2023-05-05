@@ -14,6 +14,7 @@ from .datasets.image_domain_folder      import ImageDomainFolder
 from .datasets.image_domain_hierarchy   import ImageDomainHierarchy
 from .datasets.ndarray_domain_hierarchy import NDArrayDomainHierarchy
 from .datasets.zipper                   import DatasetZipper
+from .datasets.custom_dataset           import custom_dataset
 
 from .loader_zipper import DataLoaderZipper
 from .transforms    import select_transform
@@ -48,6 +49,11 @@ def select_dataset(name, path, split, transform, **kwargs):
         return torchvision.datasets.ImageFolder(
             os.path.join(path, split), transform = transform, **kwargs
         )
+    if name == 'custom':
+        assert 'dataset' in kwargs, \
+            'a path to your dataset API must provided'
+        dataset = kwargs.pop('dataset')
+        return custom_dataset(dataset, path, split = split, **kwargs)
 
     return get_toyzero_dataset_torch(
         name, path, transform = transform, split = split, **kwargs
