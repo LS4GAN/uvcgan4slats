@@ -2,7 +2,7 @@
 This is an example of loading data that need transform.
 It will load an MRI dataset adapted from BRaTS 2021 Task 1 dataset.
 
-To run it, please do the following.
+To run it, please do the folowing.
 In the folder containing this script,
 0. activate conda environment `uvcgan4slats` by running
   ```
@@ -12,34 +12,32 @@ In the folder containing this script,
   ```
   export UVCGAN_DATA=./data
   ```
-2. run `python dataloading_transform.py`
+2. run `python dataloading_custom.py`
 
-**NOTE:** There is a disadvantage of using a function as transform
-because functions cannot be be easily serialized. And hence in the
-config file saved for a particular (pre-)training session, a callable
-transform will just be saved as callable without any detail.
-
-See `dataloading_custom.py` for an example of using a customized
-dataset API.
+To use a custom dataset:
+1. Set the `name` of the dataset to be `custom` (line 43)
+1. Provide the path to your dataset API in the field `dataset` (line 46)
+1. Give other arguments you dataset API takes (line 51 and 52)
+1. The class name of your dataset must be `Dataset`
+1. **DO NOT** provide any transform.
+  All necessary pre-processing to your data should be coded in
+  your dataset API. The parameters `transform_train` and
+  `transform_test` are not used.
+Your custom dataset API must accept three arguments:
+- path: path to your data
+- domain: domain you need to load;
+- split: the split of the data in {'train', 'val', 'test'}
+Offer other arguments your dataset API can takes
+in the 'dataset' field.
 """
 
 from uvcgan.config import Config
 from uvcgan.data import construct_data_loaders
 
-
-def custom_transform(array):
-    """
-    0-255 data to (-.5, .5)
-    """
-    return array / 255. - .5
-
-
 def main():
-
     """
-    Loading an MRI dataset with transform
+    Loading an excerpt from the SLATS dataset
     """
-
     side = 368
 
     args_dict = {
@@ -47,13 +45,18 @@ def main():
             'datasets' : [
                 {
                     'dataset' : {
-                        'name'   : 'ndarray-domain-hierarchy',
-                        'domain' : domain,
-                        'path'   : f'mri_{side}',
+                        'name'    : 'custom',
+                        # the path to your own dataset API
+                        'dataset' : './mri_dataset.py',
+                        'path'    : f'mri_{side}',
+                        'domain'  : domain,
+                        # other parameters your dataset API takes
+                        'scale'   : 255.,
+                        'shift'   : -.5,
                     },
                     'shape'           : (1, side, side),
-                    'transform_train' : custom_transform,
-                    'transform_test'  : custom_transform,
+                    'transform_train' : None, # not used
+                    'transform_test'  : None, # not used
                 } for domain in [ 'a', 'b' ]
             ],
             'merge_type' : 'unpaired'
