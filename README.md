@@ -7,7 +7,7 @@ to the domain translation problem, common in science.
 This README file has two main parts. In the first
 [part](#neutrino-detector-response-translation), we describe how to
 apply `UVCGAN` to the translation of LArTPC detector responses, following
-the [`UVCGAN4SLATS` paper][uvcgan_paper]: _Unsupervised Domain Transfer
+the [`UVCGAN4SLATS` paper][uvcgan4slats_paper]: _Unsupervised Domain Transfer
 for Science: Exploring Deep Learning Methods for Translation between LArTPC
 Detector Simulations with Differing Response Models_.
 
