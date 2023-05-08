@@ -36,7 +36,7 @@ environment can be created by running the following command from the
 ```
 conda env create -f contrib/conda_env.yml
 ```
-Activat the environment by running
+Activate the environment by running
 ```
 conda activate uvcgan4slats
 ```
