@@ -268,7 +268,7 @@ options:
 
 The generator pre-training can be started with:
 ```
-python ./script/slats/pretrain_slats-256.py
+python ./scripts/slats/pretrain_slats-256.py
 ```
 The type of the generator and batch size can be configured using command-line
 flags `--gen` and `--batch_size`, respectively. All the other parameters (e.g.
@@ -297,7 +297,7 @@ pre-trained model.
 
 The translation training can be started with:
 ```
-python ./script/slats/train_slats-256.py
+python ./scripts/slats/train_slats-256.py
 ```
 
 ### 2.1 Key hyper-parameters for optimal performance
